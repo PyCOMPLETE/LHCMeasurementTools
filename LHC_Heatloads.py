@@ -234,5 +234,19 @@ def sector_all_variables(sectors):
                 sector_variable_list.append(curr_variable)
 
     return sector_variable_list
+    
+def get_dict_magnet_lengths():
+    dict_lengths = {}
+    for kk in variable_lists_heatloads.keys():
+        for device in variable_lists_heatloads[kk]:
+            dict_lengths[device] = magnet_length[kk][0]
+    return dict_lengths
+    
+def get_dict_cryostat_lengths():
+    dict_lengths = {}
+    for kk in variable_lists_heatloads.keys():
+        for device in variable_lists_heatloads[kk]:
+            dict_lengths[device] = cryogenic_length[kk][0]
+    return dict_lengths
 
 

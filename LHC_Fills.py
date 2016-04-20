@@ -105,4 +105,27 @@ def get_varlist():
                'HX:BMODE_BEAMDUMP']
 
     return varlist
- 
+
+    
+class Fills_Info(object):
+	def __init__(self, pkl_name):
+		with open(pkl_name, 'rb') as fid:
+			self.dict_fill_bmodes = pickle.load(fid)
+			
+	def fills_in_time_window(self, t_start, t_end):
+		dict_fill_bmodes=self.dict_fill_bmodes
+		fill_list = []
+		for filln in dict_fill_bmodes.keys():
+			t_start_fill = dict_fill_bmodes[filln]['t_startfill']
+			t_end_fill = dict_fill_bmodes[filln]['t_endfill']
+			if not((t_end_fill < t_start) or (t_start_fill > t_end)):
+				fill_list.append(filln)
+		
+		return sorted(fill_list)
+
+		
+
+
+			
+			
+

@@ -3,7 +3,7 @@ import TimberManager as tm
 from scipy.interpolate import interp1d
 
 class energy:
-    def __init__(self, timber_variable, beam=0):
+    def __init__(self, timber_variable, beam=0, t_start_fill=None, t_end_fill=None):
         if type(timber_variable) is str:
             if not (beam == 1 or beam == 2):
                 raise ValueError('You need to specify which beam! (1 or 2)')
@@ -13,9 +13,16 @@ class energy:
             timber_variable_energy = timber_variable[get_variable_dict(beam)['ENERGY']]
 
         self.t_stamps = timber_variable_energy.t_stamps
+       
+        
         self.energy = np.atleast_1d(np.squeeze(timber_variable_energy.float_values()))
         #self.energy = map(lambda x: float(x[0]), self.energy)
-	
+        if len(self.energy) == 1 and t_start_fill is not None and t_end_fill is not None:
+             self.t_stamps = [t_start_fill, t_end_fill]
+             self.energy = 2*[self.energy[0]] 
+            
+            
+     
         self.t_stamps = np.array(self.t_stamps)
         self.energy = np.array(self.energy)
         self.interp = interp1d(self.t_stamps, self.energy, bounds_error=False)
@@ -25,6 +32,8 @@ class energy:
         if self.t_stamps[ind_min] > t_obs:
             ind_min -= 1
         return self.energy[ind_min]
+        
+
 	
 
 def get_variable_dict(beam):

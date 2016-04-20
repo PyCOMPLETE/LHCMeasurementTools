@@ -3,6 +3,7 @@ import numpy as np
 import datetime
 import matplotlib
 
+
 def unixstamp2datestring(t_stamp):
     return time.strftime("%Y_%m_%d", time.localtime(t_stamp))
 
@@ -28,3 +29,31 @@ def unixstamp2localtimestamp(t_stamps):
 
 def unixstampNow():
 	return time.mktime(time.localtime())
+
+class TimeConverter(object):
+    def __init__(self, time_in, t_ref=0, t_plot_tick_h=None):
+        self.time_in = time_in
+        self.t_ref = t_ref
+        self.t_plot_tick_h = t_plot_tick_h
+        
+    def from_unix(self, t_stamps):
+        if self.time_in is 'h':
+            ret = ((t_stamps-self.t_ref)/3600.)
+        if self.time_in is 'd':
+            ret = ((t_stamps-self.t_ref)/3600./24.)
+        elif self.time_in is 'datetime':
+            ret = matplotlib.dates.date2num(map(datetime.datetime.fromtimestamp, np.atleast_1d(t_stamps)))
+        
+        return ret
+        
+    def set_x_for_plot(self, fig, ax):
+        if self.time_in is 'datetime':
+            hfmt = matplotlib.dates.DateFormatter('%a %d-%m %H:%M')
+            ax.xaxis.set_major_formatter(hfmt)
+            if self.t_plot_tick_h is not None:
+                ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(np.arange(0, 24, self.t_plot_tick_h)))
+            fig.autofmt_xdate()
+
+            
+        
+    
