@@ -37,17 +37,23 @@ class TimeConverter(object):
         self.t_plot_tick_h = t_plot_tick_h
         
     def from_unix(self, t_stamps):
-        if self.time_in is 'h':
+        if self.time_in == 'h':
             ret = ((t_stamps-self.t_ref)/3600.)
-        if self.time_in is 'd':
+        if self.time_in == 'd':
             ret = ((t_stamps-self.t_ref)/3600./24.)
-        elif self.time_in is 'datetime':
+        elif self.time_in == 'datetime' or self.time_in == 'hourtime':
             ret = matplotlib.dates.date2num(map(datetime.datetime.fromtimestamp, np.atleast_1d(t_stamps)))
         
         return ret
         
     def set_x_for_plot(self, fig, ax):
-        if self.time_in is 'datetime':
+        if self.time_in == 'hourtime':
+            hfmt = matplotlib.dates.DateFormatter('%H:%M')
+            ax.xaxis.set_major_formatter(hfmt)
+            if self.t_plot_tick_h is not None:
+                ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(np.arange(0, 24, self.t_plot_tick_h)))
+
+        if self.time_in == 'datetime':
             hfmt = matplotlib.dates.DateFormatter('%a %d-%m %H:%M')
             ax.xaxis.set_major_formatter(hfmt)
             if self.t_plot_tick_h is not None:
