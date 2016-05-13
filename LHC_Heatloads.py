@@ -102,6 +102,7 @@ def groups_dict():
 cryogenic_length = {}
 
 cryogenic_length['AVG_ARC'] = [53.45]
+cryogenic_length['MODEL'] = [53.45]
 
 cryogenic_length['Q4D2s_IR1'] = [19.4]
 cryogenic_length['Q4D2s_IR5'] = [19.4]
@@ -133,7 +134,7 @@ cryogenic_length['special_total'] = [53.45]
 magnet_length = {}
 
 magnet_length['AVG_ARC'] = [53.45]
-
+magnet_length['MODEL'] = [53.45]
 magnet_length['Q4D2s_IR1'] = [18.08]
 magnet_length['Q4D2s_IR5'] = [18.08]
 magnet_length['Q4D2s_IR2'] = [21.39]

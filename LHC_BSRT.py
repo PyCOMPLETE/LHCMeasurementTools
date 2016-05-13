@@ -2,12 +2,13 @@ import numpy as np
 import TimberManager as tm
 
 class BSRT:
-    def __init__(self, timber_variable_bsrt, beam=0):
+    def __init__(self, timber_variable_bsrt, beam=0, calib_dict=None):
 
         # assume timber_variable_bsrt is filename string for now
         if not (beam == 1 or beam == 2):
             raise ValueError('You need to specify which beam! (1 or 2)')
         self.beam = beam
+        self.e_dict = calib_dict
         if type(timber_variable_bsrt) is dict:
             dict_timber = timber_variable_bsrt
         else:
@@ -46,8 +47,11 @@ class BSRT:
         self.sigma_v = np.array(self.sigma_v)
 
 
-    def calculate_emittances(self, energy_ob):
-        e_dict = emittance_dictionary()
+    def calculate_emittances_slow(self, energy_ob):
+        if self.e_dict is None:
+            e_dict = emittance_dictionary()
+        else:
+            e_dict = self.e_dict
         self.norm_emit_h = []
         self.norm_emit_v = []
         for ii in xrange(len(self.t_stamps)):
@@ -81,6 +85,46 @@ class BSRT:
 
         self.norm_emit_h = np.array(self.norm_emit_h)
         self.norm_emit_v = np.array(self.norm_emit_v)
+        
+    def calculate_emittances(self, energy_ob):
+        if self.e_dict is None:
+            e_dict = emittance_dictionary()
+        else:
+            e_dict = self.e_dict
+        self.norm_emit_h = []
+        self.norm_emit_v = []
+    
+        sigma_corr_h = 0.*self.sigma_h
+        sigma_corr_v = 0.*self.sigma_v
+        betaf_h = 0.*self.sigma_h+1.
+        betaf_v = 0.*self.sigma_v+1.
+        gamma = 0.*self.sigma_h
+        
+        energy = np.array(map(lambda x : energy_ob.nearest_older_sample(x), self.t_stamps))
+        
+        mask_450 = np.logical_and(energy > 400., energy < 500.)
+        sigma_corr_h[mask_450] = e_dict['sigma_corr_h'][450.][self.beam]
+        sigma_corr_v[mask_450] = e_dict['sigma_corr_v'][450.][self.beam]
+        betaf_h[mask_450] = e_dict['betaf_h'][450.][self.beam]
+        betaf_v[mask_450] = e_dict['betaf_v'][450.][self.beam]
+        gamma[mask_450] = e_dict['gamma'][450.]
+        
+        mask_6500 = np.logical_and(energy > 6400., energy < 6600.)
+        sigma_corr_h[mask_6500] = e_dict['sigma_corr_h'][6500.][self.beam]
+        sigma_corr_v[mask_6500] = e_dict['sigma_corr_v'][6500.][self.beam]
+        betaf_h[mask_6500] = e_dict['betaf_h'][6500.][self.beam]
+        betaf_v[mask_6500] = e_dict['betaf_v'][6500.][self.beam]
+        gamma[mask_6500] = e_dict['gamma'][6500.]
+        
+        sigma_h_corr_sq = self.sigma_h**2 - sigma_corr_h**2
+        sigma_v_corr_sq = self.sigma_v**2 - sigma_corr_v**2 
+        
+        phys_emit_h = sigma_h_corr_sq/betaf_h
+        phys_emit_v = sigma_v_corr_sq/betaf_v
+        
+        self.norm_emit_h = phys_emit_h*gamma
+        self.norm_emit_v = phys_emit_v*gamma
+
 
 
     def find_start_scans(self, scan_thresh):
