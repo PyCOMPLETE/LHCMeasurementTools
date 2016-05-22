@@ -108,6 +108,7 @@ class blength:
 
         self.t_stamps = np.array(self.t_stamps)
         self.avblen = np.array(map(mean_nonzero, self.blen))
+        self.blen = np.array(self.blen)
 
 
     def nearest_older_sample(self, t_obs, flag_return_time=False):
