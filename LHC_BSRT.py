@@ -9,7 +9,7 @@ class BSRT:
             raise ValueError('You need to specify which beam! (1 or 2)')
         self.beam = beam
         self.e_dict = calib_dict
-        if type(timber_variable_bsrt) is dict:
+        if hasattr(timber_variable_bsrt, '__getitem__'):
             dict_timber = timber_variable_bsrt
         else:
             dict_timber = tm.parse_timber_file(timber_variable_bsrt, verbose=True)
@@ -18,10 +18,10 @@ class BSRT:
         sigma_v = dict_timber[get_variable_dict(beam)['SIGMA_V']]
         gate = dict_timber[get_variable_dict(beam)['GATE_DELAY']]
 
-        if (sigma_h.t_stamps != sigma_v.t_stamps):
-            raise Warning('Timestamps for the two channels (H and V) not equal!')
-        if (sigma_v.t_stamps != gate.t_stamps):
-            bunches_effectively_recorded = self.get_bunches_effectively_recorded(gate, sigma_v)             
+        if np.sum(np.abs(sigma_h.t_stamps - sigma_v.t_stamps))>1e-6 or np.sum(np.abs(sigma_h.t_stamps - gate.t_stamps))>1e-6 :
+            raise ValueError('Timestamps for the two channels (H and V) not equal!')
+        #~ if (sigma_v.t_stamps != gate.t_stamps):
+            #~ bunches_effectively_recorded = self.get_bunches_effectively_recorded(gate, sigma_v)             
         else:
             bunches_effectively_recorded = gate 
 

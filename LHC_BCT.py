@@ -10,7 +10,7 @@ class BCT(object):
                 raise ValueError('You need to specify which beam! (1 or 2)')
             dict_timber = tm.parse_timber_file(timber_variable, verbose=True)
             timber_variable_BCT = dict_timber[get_variable_dict(beam)['BEAM_INTENSITY']]
-        elif type(timber_variable) is dict:
+        elif hasattr(timber_variable, '__getitem__'):
             timber_variable_BCT = timber_variable[get_variable_dict(beam)['BEAM_INTENSITY']]            
 
         self.t_stamps = np.float_(np.array(timber_variable_BCT.t_stamps))

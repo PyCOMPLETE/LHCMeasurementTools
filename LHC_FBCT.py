@@ -9,7 +9,7 @@ class FBCT:
                 raise ValueError('You need to specify which beam! (1 or 2)')
             dict_timber = tm.parse_timber_file(timber_variable, verbose=True)
             timber_variable_FBCT = dict_timber[get_variable_dict(beam)['BUNCH_INTENSITY_' + device]]
-        elif type(timber_variable) is dict:
+        elif hasattr(timber_variable, '__getitem__'):
             timber_variable_FBCT = timber_variable[get_variable_dict(beam)['BUNCH_INTENSITY_' + device]]            
 
         self.t_stamps = timber_variable_FBCT.t_stamps

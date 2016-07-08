@@ -10,7 +10,7 @@ class filled_buckets:
         if type(timber_variable) is str:
             dict_timber = tm.parse_timber_file(timber_variable, verbose=True)
             timber_variable_filled = dict_timber[get_variable_dict(beam)['FILLED_BUCKETS']]
-        elif type(timber_variable) is dict:
+        elif hasattr(timber_variable, '__getitem__'):
             timber_variable_filled = timber_variable[get_variable_dict(beam)['FILLED_BUCKETS']]
         elif isinstance(timber_variable, tm.timber_variable_list):
             timber_variable_filled = timber_variable
@@ -73,7 +73,7 @@ class blength:
             if timber_variable_filled_bucket == None:
                 timber_variable_filled_bucket = dict_timber[get_variable_dict(beam)['FILLED_BUCKETS']]
 
-        elif type(timber_variable_blength) is dict:
+        elif hasattr(timber_variable_blength, '__getitem__'):
             dict_timber = timber_variable_blength
             timber_variable_blength = dict_timber[get_variable_dict(beam)['BUNCH_LENGTH']]
             if timber_variable_filled_bucket == None:

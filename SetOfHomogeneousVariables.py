@@ -8,7 +8,7 @@ class SetOfHomogeneousNumericVariables:
 
         if type(timber_variables) is str:
             dict_timber = tm.parse_timber_file(timber_variables, verbose=True)
-        elif type(timber_variables) is dict:
+        elif hasattr(timber_variables, '__getitem__'):
             dict_timber = timber_variables
 
         self.timber_variables = {}

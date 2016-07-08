@@ -9,7 +9,7 @@ class energy:
                 raise ValueError('You need to specify which beam! (1 or 2)')
             dict_timber = tm.parse_timber_file(timber_variable, verbose=True)
             timber_variable_energy = dict_timber[get_variable_dict(beam)['ENERGY']]
-        elif type(timber_variable) is dict:
+        elif hasattr(timber_variable, '__getitem__'):
             timber_variable_energy = timber_variable[get_variable_dict(beam)['ENERGY']]
 
         self.t_stamps = timber_variable_energy.t_stamps
