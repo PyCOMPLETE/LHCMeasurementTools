@@ -1,6 +1,8 @@
 import numpy as np
 import TimberManager as tm
 
+na = np.array
+
 class BSRT:
     def __init__(self, timber_variable_bsrt, beam=0, calib_dict=None):
 
@@ -18,7 +20,7 @@ class BSRT:
         sigma_v = dict_timber[get_variable_dict(beam)['SIGMA_V']]
         gate = dict_timber[get_variable_dict(beam)['GATE_DELAY']]
 
-        if np.sum(np.abs(sigma_h.t_stamps - sigma_v.t_stamps))>1e-6 or np.sum(np.abs(sigma_h.t_stamps - gate.t_stamps))>1e-6 :
+        if np.sum(np.abs(na(sigma_h.t_stamps) - na(sigma_v.t_stamps)))>1e-6 or np.sum(np.abs(na(sigma_h.t_stamps) - na(gate.t_stamps)))>1e-6 :
             raise ValueError('Timestamps for the two channels (H and V) not equal!')
         #~ if (sigma_v.t_stamps != gate.t_stamps):
             #~ bunches_effectively_recorded = self.get_bunches_effectively_recorded(gate, sigma_v)             
@@ -159,6 +161,31 @@ class BSRT:
                 i1 += 1
          
         return recorded_bunches
+        
+    def get_bbb_emit_evolution(self):
+        bunch_n_un= np.sort(np.unique(bsrt.bunch_n))
+        emit_h_bbb=[]
+        emit_v_bbb=[]
+        t_bbb=[]       
+       
+        for i_line, i_bunch in enumerate(bunch_n_un):
+                inds=np.nonzero(bsrt.bunch_n==i_bunch)
+                x=bsrt.norm_emit_h[inds]
+                y=bsrt.norm_emit_v[inds]
+                t=bsrt.t_stamps[inds]
+               
+                emit_h_bbb.append(x)
+                emit_v_bbb.append(y)
+                t_bbb.append(t)
+
+#       emit_h_bbb = np.array(emit_h_bbb)
+#       emit_h_bbb.flatten()
+#       emit_v_bbb = np.array(emit_v_bbb)
+#       emit_v_bbb.flatten()
+#       t_bbb = np.array(t_bbb)
+#       t_bbb.flatten()
+
+        return t_bbb, emit_h_bbb, emit_v_bbb
 
 
 class Masked:
