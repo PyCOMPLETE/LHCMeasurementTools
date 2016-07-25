@@ -4,7 +4,7 @@ import TimberManager as tm
 na = np.array
 
 class BSRT:
-    def __init__(self, timber_variable_bsrt, beam=0, calib_dict=None):
+    def __init__(self, timber_variable_bsrt, beam=0, calib_dict=None, average_repeated_meas=False):
 
         # assume timber_variable_bsrt is filename string for now
         if not (beam == 1 or beam == 2):
@@ -37,11 +37,38 @@ class BSRT:
                 print 'expanding %.1f'%(float(ii)/len(bunches_effectively_recorded.t_stamps)*100) + """%"""	
         
             N_meas = len(bunches_effectively_recorded.values[ii])
-            for jj in xrange(N_meas):
-                self.bunch_n.append(np.float_(bunches_effectively_recorded.values[ii][jj]))
-                self.sigma_h.append(np.float_(sigma_h.values[ii][jj]))
-                self.sigma_v.append(np.float_(sigma_v.values[ii][jj]))
-                self.t_stamps.append(np.float_(sigma_v.t_stamps[ii]) + float(jj)*1e-3/float(N_meas))        
+            
+            if average_repeated_meas:
+                bunch_curr_aver = int(float(bunches_effectively_recorded.values[ii][0]))
+                n_aver = 0
+                sigma_h_sum = 0.
+                sigma_v_sum = 0.
+                for jj in xrange(N_meas):
+                    sigma_h_sum+= float(sigma_h.values[ii][jj])
+                    sigma_v_sum+= float(sigma_v.values[ii][jj])
+                    n_aver+=1
+                                        
+                    if jj == N_meas-1:
+                        self.bunch_n.append(bunch_curr_aver)
+                        self.sigma_h.append(sigma_h_sum/float(n_aver))
+                        self.sigma_v.append(sigma_v_sum/float(n_aver))
+                        self.t_stamps.append(np.float_(sigma_v.t_stamps[ii]) + float(jj)*1e-3/float(N_meas))
+                    elif int(float(bunches_effectively_recorded.values[ii][jj+1]))!=bunch_curr_aver:
+                        self.bunch_n.append(bunch_curr_aver)
+                        self.sigma_h.append(sigma_h_sum/float(n_aver))
+                        self.sigma_v.append(sigma_v_sum/float(n_aver))
+                        self.t_stamps.append(np.float_(sigma_v.t_stamps[ii]) + float(jj)*1e-3/float(N_meas))
+                        
+                        bunch_curr_aver = int(float(bunches_effectively_recorded.values[ii][jj+1]))
+                        n_aver = 0
+                        sigma_h_sum = 0.
+                        sigma_v_sum = 0.
+            else:
+                for jj in xrange(N_meas):
+                    self.bunch_n.append(np.float_(bunches_effectively_recorded.values[ii][jj]))
+                    self.sigma_h.append(np.float_(sigma_h.values[ii][jj]))
+                    self.sigma_v.append(np.float_(sigma_v.values[ii][jj]))
+                    self.t_stamps.append(np.float_(sigma_v.t_stamps[ii]) + float(jj)*1e-3/float(N_meas))    
                      
         self.t_stamps = np.array(self.t_stamps)
         self.bunch_n = np.array(self.bunch_n)
