@@ -34,15 +34,15 @@ class BSRT:
 
         for ii in xrange(len(bunches_effectively_recorded.t_stamps)):
             if np.mod(ii,10000) == 0:
-		print 'expanding %.1f'%(float(ii)/len(bunches_effectively_recorded.t_stamps)*100) + """%"""	
-	
+                print 'expanding %.1f'%(float(ii)/len(bunches_effectively_recorded.t_stamps)*100) + """%"""	
+        
             N_meas = len(bunches_effectively_recorded.values[ii])
             for jj in xrange(N_meas):
-		self.bunch_n.append(np.float_(bunches_effectively_recorded.values[ii][jj]))
-		self.sigma_h.append(np.float_(sigma_h.values[ii][jj]))
-		self.sigma_v.append(np.float_(sigma_v.values[ii][jj]))
-		self.t_stamps.append(np.float_(sigma_v.t_stamps[ii]) + float(jj)*1e-3/float(N_meas))        
-             
+                self.bunch_n.append(np.float_(bunches_effectively_recorded.values[ii][jj]))
+                self.sigma_h.append(np.float_(sigma_h.values[ii][jj]))
+                self.sigma_v.append(np.float_(sigma_v.values[ii][jj]))
+                self.t_stamps.append(np.float_(sigma_v.t_stamps[ii]) + float(jj)*1e-3/float(N_meas))        
+                     
         self.t_stamps = np.array(self.t_stamps)
         self.bunch_n = np.array(self.bunch_n)
         self.sigma_h = np.array(self.sigma_h)
@@ -163,29 +163,32 @@ class BSRT:
         return recorded_bunches
         
     def get_bbb_emit_evolution(self):
-        bunch_n_un= np.sort(np.unique(bsrt.bunch_n))
+        bunch_n_un= np.sort(np.unique(self.bunch_n))
         emit_h_bbb=[]
         emit_v_bbb=[]
-        t_bbb=[]       
+        t_bbb=[]
+        
+        dict_bunches = {}       
        
         for i_line, i_bunch in enumerate(bunch_n_un):
-                inds=np.nonzero(bsrt.bunch_n==i_bunch)
-                x=bsrt.norm_emit_h[inds]
-                y=bsrt.norm_emit_v[inds]
-                t=bsrt.t_stamps[inds]
+                if np.mod(i_line,10)==0:
+                    print 're-shuffle %.1f'%(float(i_line)/len(bunch_n_un)*100)+"""%"""
+                inds=np.nonzero(self.bunch_n==i_bunch)
+                x=self.norm_emit_h[inds]
+                y=self.norm_emit_v[inds]
+                t=self.t_stamps[inds]
                
                 emit_h_bbb.append(x)
                 emit_v_bbb.append(y)
                 t_bbb.append(t)
 
-#       emit_h_bbb = np.array(emit_h_bbb)
-#       emit_h_bbb.flatten()
-#       emit_v_bbb = np.array(emit_v_bbb)
-#       emit_v_bbb.flatten()
-#       t_bbb = np.array(t_bbb)
-#       t_bbb.flatten()
+                dict_bunches[i_bunch] = {}
+                dict_bunches[i_bunch]['norm_emit_h'] = x
+                dict_bunches[i_bunch]['norm_emit_v'] = y
+                dict_bunches[i_bunch]['t_stamp'] = t
+                
 
-        return t_bbb, emit_h_bbb, emit_v_bbb
+        return dict_bunches, t_bbb, emit_h_bbb, emit_v_bbb, bunch_n_un
 
 
 class Masked:
