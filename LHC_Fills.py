@@ -133,7 +133,8 @@ class Fills_Info(object):
                 found = True
                 filln_found = filln
                 break
-                
+        if not found:
+            raise ValueError('Fill not fount')
         return filln_found
 
 

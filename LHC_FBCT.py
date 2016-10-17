@@ -2,7 +2,7 @@ import numpy as np
 import TimberManager as tm
 
 class FBCT:
-    def __init__(self, timber_variable, beam=0, device='A'):
+    def __init__(self, timber_variable, beam=0, device='A', bct_for_norm=None):
 
         if type(timber_variable) is str:
             if not (beam == 1 or beam == 2):
@@ -52,6 +52,7 @@ class FBCT:
                 return 0.*self.bint[ind_min]
             else:	
                 return self.bint[ind_min]
+                
 
 		
 def get_variable_dict(beam):

@@ -1,6 +1,7 @@
 from matplotlib import rc, rcdefaults
 import pylab as pl
 from colorsys import hsv_to_rgb
+import numpy as np
 
 
 def mystyle(fontsz=16):
@@ -28,4 +29,5 @@ def scix():
 
 
 def colorprog(i_prog, Nplots, v1 = .9, v2 = 1.):
+	#return [pl.cm.rainbow(k) for k in np.linspace(0, 1, Nplots)][i_prog]
 	return hsv_to_rgb(float(i_prog)/float(Nplots), v1, v2)
