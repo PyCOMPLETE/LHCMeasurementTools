@@ -125,6 +125,8 @@ class BSRT:
     
         sigma_corr_h = 0.*self.sigma_h
         sigma_corr_v = 0.*self.sigma_v
+        rescale_sigma_h = 0.*self.sigma_h
+        rescale_sigma_v = 0.*self.sigma_v
         betaf_h = 0.*self.sigma_h+1.
         betaf_v = 0.*self.sigma_v+1.
         gamma = 0.*self.sigma_h
@@ -134,6 +136,8 @@ class BSRT:
         mask_450 = np.logical_and(energy > 400., energy < 500.)
         sigma_corr_h[mask_450] = e_dict['sigma_corr_h'][450.][self.beam]
         sigma_corr_v[mask_450] = e_dict['sigma_corr_v'][450.][self.beam]
+        rescale_sigma_h[mask_450] = e_dict['rescale_sigma_h'][450.][self.beam]
+        rescale_sigma_v[mask_450] = e_dict['rescale_sigma_v'][450.][self.beam]
         betaf_h[mask_450] = e_dict['betaf_h'][450.][self.beam]
         betaf_v[mask_450] = e_dict['betaf_v'][450.][self.beam]
         gamma[mask_450] = e_dict['gamma'][450.]
@@ -141,12 +145,14 @@ class BSRT:
         mask_6500 = np.logical_and(energy > 6400., energy < 6600.)
         sigma_corr_h[mask_6500] = e_dict['sigma_corr_h'][6500.][self.beam]
         sigma_corr_v[mask_6500] = e_dict['sigma_corr_v'][6500.][self.beam]
+        rescale_sigma_h[mask_6500] = e_dict['rescale_sigma_h'][6500.][self.beam]
+        rescale_sigma_v[mask_6500] = e_dict['rescale_sigma_v'][6500.][self.beam]
         betaf_h[mask_6500] = e_dict['betaf_h'][6500.][self.beam]
         betaf_v[mask_6500] = e_dict['betaf_v'][6500.][self.beam]
         gamma[mask_6500] = e_dict['gamma'][6500.]
         
-        sigma_h_corr_sq = self.sigma_h**2 - sigma_corr_h**2
-        sigma_v_corr_sq = self.sigma_v**2 - sigma_corr_v**2 
+        sigma_h_corr_sq = (self.sigma_h*rescale_sigma_h)**2 - sigma_corr_h**2
+        sigma_v_corr_sq = (self.sigma_v*rescale_sigma_v)**2 - sigma_corr_v**2 
         
         phys_emit_h = sigma_h_corr_sq/betaf_h
         phys_emit_v = sigma_v_corr_sq/betaf_v
