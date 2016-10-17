@@ -76,44 +76,44 @@ class BSRT:
         self.sigma_v = np.array(self.sigma_v)
 
 
-    def calculate_emittances_slow(self, energy_ob):
-        if self.e_dict is None:
-            e_dict = emittance_dictionary()
-        else:
-            e_dict = self.e_dict
-        self.norm_emit_h = []
-        self.norm_emit_v = []
-        for ii in xrange(len(self.t_stamps)):
-            if np.mod(ii,10000)==0:
-                print 'calc. emitt. %.1f'%(float(ii)/len(self.t_stamps)*100)+"""%"""
+    # def calculate_emittances_slow(self, energy_ob):
+    #     if self.e_dict is None:
+    #         e_dict = emittance_dictionary()
+    #     else:
+    #         e_dict = self.e_dict
+    #     self.norm_emit_h = []
+    #     self.norm_emit_v = []
+    #     for ii in xrange(len(self.t_stamps)):
+    #         if np.mod(ii,10000)==0:
+    #             print 'calc. emitt. %.1f'%(float(ii)/len(self.t_stamps)*100)+"""%"""
 
-            norm_emit_h  = 0.
-            norm_emit_v  = 0.
+    #         norm_emit_h  = 0.
+    #         norm_emit_v  = 0.
 
-            energy = energy_ob.nearest_older_sample(self.t_stamps[ii])
-            if energy > 400. and energy < 500.:
-                energy = 450.
-            elif energy > 6400. and energy < 6600.:
-                energy = 6500.
-            else:
-                self.norm_emit_h.append(norm_emit_h)
-                self.norm_emit_v.append(norm_emit_v)
-                continue
+    #         energy = energy_ob.nearest_older_sample(self.t_stamps[ii])
+    #         if energy > 400. and energy < 500.:
+    #             energy = 450.
+    #         elif energy > 6400. and energy < 6600.:
+    #             energy = 6500.
+    #         else:
+    #             self.norm_emit_h.append(norm_emit_h)
+    #             self.norm_emit_v.append(norm_emit_v)
+    #             continue
 
-            sigma_h_corr_sq = self.sigma_h[ii]**2 - e_dict['sigma_corr_h'][energy][self.beam]**2
-            sigma_v_corr_sq = self.sigma_v[ii]**2 - e_dict['sigma_corr_v'][energy][self.beam]**2
+    #         sigma_h_corr_sq = self.sigma_h[ii]**2 - e_dict['sigma_corr_h'][energy][self.beam]**2
+    #         sigma_v_corr_sq = self.sigma_v[ii]**2 - e_dict['sigma_corr_v'][energy][self.beam]**2
 
-            phys_emit_h = sigma_h_corr_sq/e_dict['betaf_h'][energy][self.beam]
-            phys_emit_v = sigma_v_corr_sq/e_dict['betaf_v'][energy][self.beam]
+    #         phys_emit_h = sigma_h_corr_sq/e_dict['betaf_h'][energy][self.beam]
+    #         phys_emit_v = sigma_v_corr_sq/e_dict['betaf_v'][energy][self.beam]
                 
-            norm_emit_h  = phys_emit_h*e_dict['gamma'][energy]
-            norm_emit_v  = phys_emit_v*e_dict['gamma'][energy]
+    #         norm_emit_h  = phys_emit_h*e_dict['gamma'][energy]
+    #         norm_emit_v  = phys_emit_v*e_dict['gamma'][energy]
             
-            self.norm_emit_h.append(norm_emit_h)
-            self.norm_emit_v.append(norm_emit_v)
+    #         self.norm_emit_h.append(norm_emit_h)
+    #         self.norm_emit_v.append(norm_emit_v)
 
-        self.norm_emit_h = np.array(self.norm_emit_h)
-        self.norm_emit_v = np.array(self.norm_emit_v)
+    #     self.norm_emit_h = np.array(self.norm_emit_h)
+    #     self.norm_emit_v = np.array(self.norm_emit_v)
         
     def calculate_emittances(self, energy_ob):
         if self.e_dict is None:
