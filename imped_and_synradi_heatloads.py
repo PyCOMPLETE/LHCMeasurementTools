@@ -72,7 +72,7 @@ class HeatLoadCalculatorImpedance(object):
             #benoit/nicolas
             #rho_B_T = rho_B0_T *(1.0048 + 0.0038*b_field*self.copper_rho_Ohm_m(300.)/self.copper_rho_Ohm_m(20.))
             #For 20K!!!
-            rho_B_T = 2.4e-10 *(1.0048 + 0.0038*b_field*70.)
+            #rho_B_T = 2.4e-10 *(1.0048 + 0.0038*b_field*70.)
 
         print rho_B_T
         per_bunch_factor = ppb**2 * sigma_t**(-1.5)
@@ -83,8 +83,8 @@ class HeatLoadCalculatorImpedance(object):
         P_no_weld = 1./self.circumference_m*gammafunc(0.75)*n_bunches/self.chamb_radius_m * (qe/2./np.pi)**2* np.sqrt(c*rho_B_T*Z0_vac/2.) * per_bunch_factor
 
         if self.weld_Thickness_m is not None:
-            #weld_Factor = 1. + np.sqrt(self.weld_Rho_Ohm_m/rho_B_T)*self.weld_Thickness_m/(2.*np.pi*self.chamb_radius_m)
-            weld_Factor = 1.4
+            weld_Factor = 1. + np.sqrt(self.weld_Rho_Ohm_m/rho_B_T)*self.weld_Thickness_m/(2.*np.pi*self.chamb_radius_m)
+            #weld_Factor = 1.4 # benoit assumption
         else:
             weld_Factor = 1.
 
@@ -117,10 +117,10 @@ class HeatLoadCalculatorImpedanceLHCArc(object):
             b_field=0., n_bunches=n_bunches)
             
     def calculate_P_Wm(self, ppb, sigma_t, energy_eV=0., n_bunches=None):
-        return self.calculate_P_Wm_dipole(ppb, sigma_t, energy_eV, n_bunches)
-         #~ return (self.calculate_P_Wm_dipole(ppb, sigma_t, energy_eV, n_bunches)*14.3*3+\
-                 #~ self.calculate_P_Wm_quad(ppb, sigma_t, energy_eV, n_bunches)*3.1+\
-                 #~ self.calculate_P_Wm_drift(ppb, sigma_t, energy_eV, n_bunches)*7.)/53.
+        #return self.calculate_P_Wm_dipole(ppb, sigma_t, energy_eV, n_bunches)#benoit assumption
+         return (self.calculate_P_Wm_dipole(ppb, sigma_t, energy_eV, n_bunches)*14.3*3+\
+                 self.calculate_P_Wm_quad(ppb, sigma_t, energy_eV, n_bunches)*3.1+\
+                 self.calculate_P_Wm_drift(ppb, sigma_t, energy_eV, n_bunches)*7.)/53.
                         
                 
 
@@ -200,9 +200,6 @@ if __name__=='__main__':
     hl_imped_hcell = hl_calculator.calculate_P_Wm(ppb=ppb_test, sigma_t=sigma_t_test,  energy_eV=energy_eV_test, n_bunches=n_bunches_test)  
     print hl_imped_hcell 
     
-    
-    
-
     
     
     import sys, os
