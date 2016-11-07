@@ -139,9 +139,6 @@ class HeatLoadImpedance(object):
 
         return p_dipole*l_dip_halfcell + p_drift*(l_halfcell-l_dip_halfcell)
 
-
-
-
 class HeatLoadSynchRad(object):
     def __init__(self, fill_dict=None, tot_int=None, bend_rad=None, energy_GeV=None, circ=None):
         if fill_dict is not None:
@@ -165,7 +162,7 @@ class HeatLoadSynchRad(object):
         
         self.t_stamps = bct.t_stamps
         self.power_bend_m = synch_rad_power_bend_m(total_intensity_both_beams, lhc_bending_radius, energy_beam_GeV, lhc_circumference)
-        self.avg_arc_heat_load_m =  self.power_bend_m * 2*np.pi*lhc_bending_radius / 8 / lhc_arc_length
+        self.avg_arc_heat_load_m = self.power_bend_m * 2*np.pi*lhc_bending_radius / (8*lhc_arc_length)
     
 def synch_rad_power_bend_m(tot_int, bend_rad, energy_GeV, circ):
     beam_gamma = energy_GeV * qe * 1e9 / (m_p*c**2)
@@ -174,11 +171,3 @@ def synch_rad_power_bend_m(tot_int, bend_rad, energy_GeV, circ):
     power_bend_m = energy_loss_bend_m * (c/circ)
 
     return power_bend_m
-
-
-
-    
-
-            
-
-

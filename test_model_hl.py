@@ -29,14 +29,14 @@ impedance_constant = gamma(0.75)/lhc_circumference * 1./aperture_radius * (const
 
 class HeatLoadImpedanceSynchRad(object):
 
-    def __init__(self, filln, rho_vs_T_file='./copper_rho_vs_T.txt', temp_beam_screen_K=20, aperture_radius=aperture_radius):
+    def __init__(self, fill_dict, rho_vs_T_file='./copper_rho_vs_T.txt', temp_beam_screen_K=20, aperture_radius=aperture_radius):
         data = np.loadtxt(rho_vs_T_file)
         copper_rho_Ohm_m = interp1d(data[:,0], data[:,1]*1e-8)
-        self.filln = filln
-        
-        fill_dict = {}
-        fill_dict.update(tm.parse_timber_file('../fill_basic_data_csvs/basic_data_fill_%d.csv'%filln, verbose=False))
-        fill_dict.update(tm.parse_timber_file('../fill_bunchbybunch_data_csvs/bunchbybunch_data_fill_%d.csv'%filln, verbose=False))
+        #self.filln = filln
+        #
+        #fill_dict = {}
+        #fill_dict.update(tm.parse_timber_file('../fill_basic_data_csvs/basic_data_fill_%d.csv'%filln, verbose=False))
+        #fill_dict.update(tm.parse_timber_file('../fill_bunchbybunch_data_csvs/bunchbybunch_data_fill_%d.csv'%filln, verbose=False))
 
         bunch_length_seconds = {}
         bunch_charge_squared = {}
