@@ -37,6 +37,13 @@ class timber_variable_list:
         if self.t_stamps[index] > t_stamp:
             index -= 1
         return self.values[index]
+
+    def calc_avg(self, begin, end):
+        return np.mean(self.selection(begin, end))
+
+    def selection(self, begin, end):
+        mask = np.logical_and(self.t_stamps > begin, self.t_stamps < end)
+        return self.values[mask]
         
 
 def parse_timber_file(timber_filename, verbose=True):
