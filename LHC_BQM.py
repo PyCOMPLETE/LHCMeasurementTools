@@ -2,7 +2,7 @@ import numpy as np
 import TimberManager as tm
 
 class filled_buckets:
-    def __init__(self, timber_variable, beam=0):
+    def __init__(self, timber_variable, beam=0, verbose=False):
 
         if not (beam == 1 or beam == 2):
                 raise ValueError('You need to specify which beam! (1 or 2)')
@@ -34,10 +34,12 @@ class filled_buckets:
         N_slots = 3564
         self.flag_filled = np.array(N_acq * [N_slots * [False]])
         array_slots = np.array(range(N_slots))
-        print 'Start building fillbucket matrix'
+        if verbose:
+            print 'Start building fillbucket matrix'
         for ii in xrange(N_acq):
            self.flag_filled[ii,:] = map(lambda x: x in self.fillbuck[ii],array_slots) 
-        print 'Done'
+        if verbose:
+            print 'Done'
 
 
     def nearest_older_sample(self, t_obs):
@@ -109,7 +111,6 @@ class blength:
         self.t_stamps = np.array(self.t_stamps)
         self.avblen = np.array(map(mean_nonzero, self.blen))
         self.blen = np.array(self.blen)
-
 
     def nearest_older_sample(self, t_obs, flag_return_time=False):
         ind_min = np.argmin(np.abs(self.t_stamps - t_obs))
