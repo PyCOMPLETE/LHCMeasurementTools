@@ -24,6 +24,10 @@ class SetOfHomogeneousNumericVariables:
             aligned_list.append(np.interp(t_first, self.timber_variables[kk].t_stamps, self.timber_variables[kk].values))
         return t_first, np.array(aligned_list)
 
+    def aligned_object(self):
+        t_first, aligned_list = self.aligned()
+        return tm.AlignedTimberData(np.array(t_first), aligned_list.T, self.variable_list)
+
     def mean(self):
         t_first, aligned = self.aligned()
         return t_first, np.mean(aligned, axis=0)
