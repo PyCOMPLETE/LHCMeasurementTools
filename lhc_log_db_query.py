@@ -16,8 +16,6 @@ def dbquery(varlist, t_start, t_stop, filename):
 	else:
 		t_stop_str_UTC = t_stop	
 	
-
-	
 	if type(varlist) is not list:
 		raise TypeError
 		
@@ -26,10 +24,10 @@ def dbquery(varlist, t_start, t_stop, filename):
 		varlist_str += var+','
 	varlist_str = varlist_str[:-1]
 	
-	currpath = __file__.split('/LHCMeasurementTools')[0]
+	currpath = os.path.dirname(os.path.abspath(__file__))
 	
-	execut = 'java -jar %s/accsoft-cals-extr-client-nodep.jar '%(currpath+'/LHCMeasurementTools')
-	config = ' -C %s/ldb_UTC.conf '%(currpath+'/LHCMeasurementTools')
+	execut = 'java -jar %s/accsoft-cals-extr-client-nodep.jar '%(currpath)
+	config = ' -C %s/ldb_UTC.conf '%(currpath)
 	time_interval = ' -t1 "'+ t_start_str_UTC +'" -t2 "'+t_stop_str_UTC+'"' 
 	variables = '-vs "%s"'%(varlist_str)
 	outpfile = ' -N .//'+filename
@@ -39,5 +37,3 @@ def dbquery(varlist, t_start, t_stop, filename):
 	print command
 	
 	os.system(command)
-	
-
