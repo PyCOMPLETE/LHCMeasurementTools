@@ -1,5 +1,4 @@
 import time
-from numpy import float_
 import numpy as np
 import calendar
 import os
@@ -134,7 +133,7 @@ class AlignedTimberData(object):
         self.data = data
         self.variables = variables
 
-def parse_aligned_csv_file(filename, empty_value=-1.):
+def parse_aligned_csv_file(filename, empty_value=np.nan):
     timestamps = []
     np_data = []
     with open(filename,'r') as csv_file:
