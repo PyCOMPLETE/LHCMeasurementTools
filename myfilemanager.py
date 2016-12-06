@@ -72,3 +72,11 @@ def h5_to_obj(filename):
         for key in f:
             d[key] = np.array(f[key])
     return obj_from_dict(d)
+
+# Only works for not nested attributes of object
+def obj_to_h5(obj, h5):
+    import h5py
+    with h5py.File(h5, 'w') as h5_handle:
+        for key in obj.__dict__:
+            h5_handle.create_dataset(key, data=getattr(obj, key))
+
