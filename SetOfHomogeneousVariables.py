@@ -33,9 +33,29 @@ class SetOfHomogeneousNumericVariables:
                 aligned_list.append(np.interp(t_first, t_stamps, values))
         return t_first, np.array(aligned_list)
 
-    def aligned_object(self):
-        t_first, aligned_list = self.aligned()
-        return tm.AlignedTimberData(np.array(t_first), aligned_list.T, self.variable_list)
+    def aligned_object(self, dt_seconds):
+        # Time stamps
+        t_min = np.inf
+        t_max = -np.inf
+        empty_vars = []
+        for key, var in self.timber_variables.iteritems():
+            try:
+                t_min = min(t_min, var.t_stamps[0])
+                t_max = max(t_max, var.t_stamps[-1])
+            except IndexError:
+                empty_vars.append(key)
+        print('Variables without data:', empty_vars)
+        tt = np.arange(t_min, t_max, dt_seconds)
+
+        # Data
+        aligned_data = np.zeros(shape=(len(tt), len(self.variable_list)))
+        for ii, kk in enumerate(self.variable_list):
+            values = self.timber_variables[kk].values
+            t_stamps = self.timber_variables[kk].t_stamps
+            if len(values) != 0:
+                # This assumes smooth data, otherwise the nearest older sample should be used!
+                aligned_data[:,ii] = np.interp(tt, t_stamps, values)
+        return tm.AlignedTimberData(tt, aligned_data, self.variable_list)
 
     def mean(self):
         t_first, aligned = self.aligned()
