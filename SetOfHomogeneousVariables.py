@@ -53,8 +53,11 @@ class SetOfHomogeneousNumericVariables:
             values = self.timber_variables[kk].values
             t_stamps = self.timber_variables[kk].t_stamps
             if len(values) != 0:
-                # This assumes smooth data, otherwise the nearest older sample should be used!
-                aligned_data[:,ii] = np.interp(tt, t_stamps, values)
+                index = 0
+                for ctr, t in enumerate(tt):
+                    while index < len(t_stamps) and t_stamps[index] <= t:
+                        index += 1
+                    aligned_data[ctr,ii] = values[index-1]
         return tm.AlignedTimberData(tt, aligned_data, self.variable_list)
 
     def mean(self):
