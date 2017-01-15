@@ -42,9 +42,13 @@ class timber_variable_list:
 
     def selection(self, begin, end):
         mask = np.logical_and(self.t_stamps > begin, self.t_stamps < end)
-        return self.values[mask]
+        try:
+            return self.values[mask]
+        except:
+            print(self.values.shape, self.t_stamps.shape)
+            raise
         
-def parse_timber_file(timber_filename, verbose=True):
+def parse_timber_file(timber_filename, verbose=False):
 
     with open(timber_filename) as fid:
         timber_lines = fid.readlines()
@@ -129,9 +133,19 @@ def dbquery(varlist, t_start, t_stop, filename):
 
 class AlignedTimberData(object):
     def __init__(self, timestamps, data, variables):
+        dictionary = {}
+        double = []
+        for ctr, var in enumerate(variables):
+            if var in dictionary:
+                double.append(var)
+            dictionary[var] = data[:,ctr]
+        if double:
+            print('Duplicate variables: %s' % double)
+
         self.timestamps = timestamps
         self.data = data
         self.variables = variables
+        self.dictionary = dictionary
 
 def parse_aligned_csv_file(filename, empty_value=np.nan):
     timestamps = []
