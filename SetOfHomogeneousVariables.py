@@ -18,8 +18,14 @@ class SetOfHomogeneousNumericVariables:
 
              self.timber_variables[var_name].values = np.array(self.timber_variables[var_name].values, dtype=float)
              shape = self.timber_variables[var_name].values.shape
-             if len(shape) > 1 and shape[1] == 1:
-                 self.timber_variables[var_name].values = np.squeeze(self.timber_variables[var_name].values, axis=1)
+             if len(shape) > 1:
+                 axis = -1
+                 if shape[1] == 1:
+                     axis = 1
+                 elif shape[0] == 1:
+                     axis = 0
+                 if axis != -1: 
+                    self.timber_variables[var_name].values = np.squeeze(self.timber_variables[var_name].values, axis=axis)
 
     def aligned(self):
         aligned_list = []
@@ -44,7 +50,8 @@ class SetOfHomogeneousNumericVariables:
                 t_max = max(t_max, var.t_stamps[-1])
             except IndexError:
                 empty_vars.append(key)
-        print('Variables without data:', empty_vars)
+        if empty_vars:
+            print('Warning: There are variables without data.', empty_vars)
         tt = np.arange(t_min, t_max, dt_seconds)
 
         # Data
@@ -54,6 +61,7 @@ class SetOfHomogeneousNumericVariables:
             t_stamps = self.timber_variables[kk].t_stamps
             if len(values) != 0:
                 index = 0
+                # Nearest older sample
                 for ctr, t in enumerate(tt):
                     while index < len(t_stamps) and t_stamps[index] <= t:
                         index += 1
