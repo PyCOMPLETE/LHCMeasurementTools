@@ -2,14 +2,11 @@ import os
 import cPickle
 import copy
 import numpy as np
+import re
 
 this_directory = os.path.dirname(os.path.abspath(__file__))
 dict_file_2016 = this_directory + '/large_heat_load_dict_2016.pkl'
 dict_file_2015 = this_directory + '/large_heat_load_dict_2015.pkl'
-
-moment = 'stable_beams'
-#moment = 'start_ramp'
-#moment = 'sb+2_hrs'
 
 with open(dict_file_2016, 'r') as f:
     main_dict_2016 = cPickle.load(f)
@@ -35,11 +32,44 @@ def merge_dicts(dict1,dict2):
 
 def _merge_dicts_recursively(dict1, dict2, new_dict):
     for key in dict1:
-        if type(dict1[key]) is dict:
+        tt = type(dict1[key])
+        if tt is dict:
             _merge_dicts_recursively(dict1[key],dict2[key], new_dict[key])
-        elif type(dict1[key]) is np.ndarray:
+        elif tt is np.ndarray:
             new_dict[key] = np.concatenate([dict1[key], dict2[key]])
         else:
-            print('Unexpected type %s for key %s!' % (type(dict1[key]), key))
+            raise ValueError('Unexpected type %s behind key %s!' % (tt, key))
 
 main_dict = merge_dicts(main_dict_2015, main_dict_2016)
+hl_dict = main_dict
+
+arc_list = ['S%i%i' % (ii,ii+1) for ii in xrange(1,8)]
+del ii
+arc_list.append('S81')
+
+re_sb = re.compile('^sb\+(\d+)_hrs$')
+tt_keys = ['stable_beams']
+hrs = [0]
+for key in hl_dict:
+    info = re_sb.search(key)
+    if info != None:
+        tt_keys.append(key)
+        hrs.append(int(info.group(1)))
+hrs_keys = zip(hrs, tt_keys)
+hrs_keys.sort(key=lambda x: x[0])
+del key, info, hrs, tt_keys, re_sb
+
+def values_over_time(hl_dict, *keys):
+    output = []
+    for fill_ctr, fill in enumerate(hl_dict['filln']):
+        xx, yy = [], []
+        for hr, key in hrs_keys:
+            dd = hl_dict[key]
+            for kk in keys:
+                dd = dd[kk]
+            if hl_dict[key]['t_stamps'][fill_ctr] != 0.:
+                val = dd[fill_ctr]
+                xx.append(hr)
+                yy.append(val)
+        output.append(np.array([xx,yy]))
+    return output
