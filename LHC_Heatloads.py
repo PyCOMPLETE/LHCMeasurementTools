@@ -94,7 +94,7 @@ def groups_dict():
     dict_hl_groups['special_HC_Q1']	= variable_lists_heatloads['special_HC_Q1']
     dict_hl_groups['special_HC_dipoles'] = variable_lists_heatloads['special_HC_D2']+\
         variable_lists_heatloads['special_HC_D3']+variable_lists_heatloads['special_HC_D4']
-#    dict_hl_groups['special_HC_total'] = variable_lists_heatloads['special_total']
+    dict_hl_groups['special_HC_total'] = variable_lists_heatloads['special_total']
 
     return dict_hl_groups
 
