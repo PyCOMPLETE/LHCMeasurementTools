@@ -43,8 +43,8 @@ def comb_legend(sp1, sp2, *args, **kwargs):
     lines2, labels2 = sp2.get_legend_handles_labels()
     sp2.legend(lines + lines2, labels + labels2, *args, **kwargs)
 
-def figure(title, figs=None):
-    fig = plt.figure()
+def figure(title, figs=None, figsize=(8*1.5, 6*1.5), **kwargs):
+    fig = plt.figure(figsize=figsize, **kwargs)
     fig.canvas.set_window_title(title)
     if figs != None:
         figs.append(fig)

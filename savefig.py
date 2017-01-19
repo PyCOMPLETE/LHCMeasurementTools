@@ -2,8 +2,6 @@ import sys
 import os
 import re
 
-#import matplotlib.pyplot as plt
-
 pdijksta_dir = '/afs/cern.ch/work/l/lhcscrub/pdijksta_PyECLOUD_benchmark/plots/'
 re_fill = re.compile('^\d{4}$')
 re_script = re.compile('^(\d{3}[a-z]?_.{4})')
