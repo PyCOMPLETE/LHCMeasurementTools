@@ -2,4 +2,7 @@
 \#*#
 *~
 *.csv
-*.pkl
+*.pkl*.swp
+*.swo
+.*.swo
+.*.swp
