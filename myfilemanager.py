@@ -74,9 +74,9 @@ def h5_to_obj(filename):
     return obj_from_dict(d)
 
 # Only works for not nested attributes of object
-def obj_to_h5(obj, h5):
+def aligned_obj_to_h5(obj, h5):
     import h5py
     with h5py.File(h5, 'w') as h5_handle:
-        for key in obj.__dict__:
-            h5_handle.create_dataset(key, data=getattr(obj, key))
-
+        h5_handle.create_dataset('timestamps', data=obj.timestamps)
+        h5_handle.create_dataset('variables', data=obj.variables)
+        h5_handle.create_dataset('data', data=obj.data)

@@ -47,7 +47,7 @@ class timber_variable_list:
         except:
             print(self.values.shape, self.t_stamps.shape)
             raise
-        
+
 def parse_timber_file(timber_filename, verbose=False):
 
     with open(timber_filename) as fid:
@@ -132,6 +132,7 @@ def dbquery(varlist, t_start, t_stop, filename):
     os.system(command)
 
 class AlignedTimberData(object):
+
     def __init__(self, timestamps, data, variables):
         dictionary = {}
         double = []
@@ -146,6 +147,18 @@ class AlignedTimberData(object):
         self.data = data
         self.variables = variables
         self.dictionary = dictionary
+
+    def nearest_older_index(self, t):
+        index = np.argmin(np.abs(self.timestamps - t))
+        if self.timestamps[index] > t:
+            index -= 1
+        return index
+
+    def nearest_older_sample(self, t):
+        return self.data[self.nearest_older_index(t),:]
+
+def atd_from_h5(obj):
+    return AlignedTimberData(obj.timestamps, obj.data, obj.variables)
 
 def parse_aligned_csv_file(filename, empty_value=np.nan):
     timestamps = []

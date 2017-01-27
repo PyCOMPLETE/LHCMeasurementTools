@@ -253,5 +253,3 @@ def get_dict_cryostat_lengths():
         for device in variable_lists_heatloads[kk]:
             dict_lengths[device] = cryogenic_length[kk][0]
     return dict_lengths
-
-
