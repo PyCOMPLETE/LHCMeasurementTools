@@ -13,19 +13,19 @@ class SetOfHomogeneousNumericVariables:
 
         self.timber_variables = {}
         for var_name in self.variable_list:
-             self.timber_variables[var_name] = dict_timber[var_name]
-             self.timber_variables[var_name].t_stamps = np.array(self.timber_variables[var_name].t_stamps,dtype=float)
+            self.timber_variables[var_name] = dict_timber[var_name]
+            self.timber_variables[var_name].t_stamps = np.array(self.timber_variables[var_name].t_stamps,dtype=float)
 
-             self.timber_variables[var_name].values = np.array(self.timber_variables[var_name].values, dtype=float)
-             shape = self.timber_variables[var_name].values.shape
-             if len(shape) > 1:
-                 axis = -1
-                 if shape[1] == 1:
-                     axis = 1
-                 elif shape[0] == 1:
-                     axis = 0
-                 if axis != -1: 
-                    self.timber_variables[var_name].values = np.squeeze(self.timber_variables[var_name].values, axis=axis)
+            self.timber_variables[var_name].values = np.array(self.timber_variables[var_name].values, dtype=float)
+            shape = self.timber_variables[var_name].values.shape
+            if len(shape) > 1:
+                axis = -1
+                if shape[1] == 1:
+                    axis = 1
+                elif shape[0] == 1:
+                    axis = 0
+                if axis != -1:
+                   self.timber_variables[var_name].values = np.squeeze(self.timber_variables[var_name].values, axis=axis)
 
     def aligned(self):
         aligned_list = []

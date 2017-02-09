@@ -3,7 +3,7 @@ import os
 import re
 
 pdijksta_dir = '/afs/cern.ch/work/l/lhcscrub/pdijksta_PyECLOUD_benchmark/plots/'
-re_fill = re.compile('^\d{4}$')
+re_fill = re.compile('^\d{4,5}$')
 re_script = re.compile('^(\d{3}[a-z]?_.{4})')
 
 def get_file_title(fig, title=None):
@@ -25,7 +25,7 @@ def get_file_title(fig, title=None):
     else:
         print('No filln found')
         filln = '0'
-    title = '_'.join([script_number,filln,title]) 
+    title = '_'.join([script_number,filln,title])
     return title.replace(' ','_') + '.png'
 
 def pdijksta(fig, title=None):
