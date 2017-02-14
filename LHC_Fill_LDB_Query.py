@@ -13,12 +13,12 @@ def save_variables_and_pickle(varlist, file_path_prefix, save_pkl, fills_dict, f
     for filln in fills_dict.keys():
 
         if fill_sublist is not None:
-                        if filln not in fill_sublist:
-                                continue
+            if filln not in fill_sublist:
+                continue
 
         t_start_fill = fills_dict[filln]['t_startfill']
         t_end_fill = fills_dict[filln]['t_endfill']
-	#t_end_fill = t_start_fill + 6*60*60
+
 
         if filln in saved_fills.keys() and (saved_fills[filln] == 'complete' or
                                             saved_fills[filln] == t_end_fill):
@@ -35,5 +35,5 @@ def save_variables_and_pickle(varlist, file_path_prefix, save_pkl, fills_dict, f
             saved_fills[filln] = t_end_fill
 
     if save_to_pickle is True:
-	    with open(save_pkl, 'wb') as fid:
-            	pickle.dump(saved_fills, fid)
+        with open(save_pkl, 'wb') as fid:
+                pickle.dump(saved_fills, fid)

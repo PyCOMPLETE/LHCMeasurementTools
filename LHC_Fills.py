@@ -33,7 +33,7 @@ def make_pickle(csv_filename, pkl_filename, t_stop):
 
     list_b_modes = []
     for kk in dict_fbm.keys():
-	if 'HX:BMODE_' in kk:
+        if 'HX:BMODE_' in kk:
             list_b_modes.append(kk.split(':BMODE_')[-1])
 		
     dict_t_start_stop_vects = {}
@@ -73,7 +73,7 @@ def make_pickle(csv_filename, pkl_filename, t_stop):
             #                                                                        +bmode][ii_start_bmode[0]]
             if len(ii_stop_bmode) > 0:
                 dict_fill_bmodes[filln]['t_stop_'+bmode] = dict_t_start_stop_vects['t_stop_'
-                                                                                   +bmode][ii_stop_bmode[0]]
+                                                                                   +bmode][ii_stop_bmode[-1]]
 
     with open(pkl_filename, 'wb') as fid:
 	pickle.dump(dict_fill_bmodes, fid)

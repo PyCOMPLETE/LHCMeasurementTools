@@ -28,14 +28,14 @@ def unixstamp2localtimestamp(t_stamps):
     return matplotlib.dates.date2num(tlocal)
 
 def unixstampNow():
-	return time.mktime(time.localtime())
+        return time.mktime(time.localtime())
 
 class TimeConverter(object):
     def __init__(self, time_in, t_ref=0, t_plot_tick_h=None):
         self.time_in = time_in
         self.t_ref = t_ref
         self.t_plot_tick_h = t_plot_tick_h
-        
+
     def from_unix(self, t_stamps):
         if self.time_in == 'h':
             ret = ((t_stamps-self.t_ref)/3600.)
@@ -43,9 +43,9 @@ class TimeConverter(object):
             ret = ((t_stamps-self.t_ref)/3600./24.)
         elif self.time_in == 'datetime' or self.time_in == 'hourtime':
             ret = matplotlib.dates.date2num(map(datetime.datetime.fromtimestamp, np.atleast_1d(t_stamps)))
-        
+
         return ret
-        
+
     def set_x_for_plot(self, fig, ax):
         if self.time_in == 'hourtime':
             hfmt = matplotlib.dates.DateFormatter('%H:%M')
@@ -61,8 +61,8 @@ class TimeConverter(object):
                     ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(np.arange(0, 24, self.t_plot_tick_h)))
                 elif self.t_plot_tick_h=='week':
                     ax.xaxis.set_major_locator(matplotlib.dates.WeekdayLocator(0))
+                elif self.t_plot_tick_h=='2weeks':
+                    ax.xaxis.set_major_locator(matplotlib.dates.WeekdayLocator(0, interval=2))
+                elif self.t_plot_tick_h=='4weeks':
+                    ax.xaxis.set_major_locator(matplotlib.dates.WeekdayLocator(0, interval=4))
             fig.autofmt_xdate()
-
-            
-        
-    
