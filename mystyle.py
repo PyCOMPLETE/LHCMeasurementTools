@@ -1,7 +1,6 @@
 from matplotlib import rc, rcdefaults
 import pylab as pl
 from colorsys import hsv_to_rgb
-import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -46,5 +45,6 @@ def figure(title, figs=None, figsize=(8*1.5, 6*1.5), **kwargs):
         figs.append(fig)
     fig.patch.set_facecolor('w')
     plt.suptitle(title, fontsize=20)
+    fig.subplots_adjust(left=0.07, right=0.90, wspace=0.36)
     return fig
 
