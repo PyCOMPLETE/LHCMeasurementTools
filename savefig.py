@@ -29,9 +29,12 @@ def get_file_title(fig, title=None):
     return title.replace(' ','_') + '.png'
 
 def pdijksta(fig, title=None):
-    file_title = get_file_title(fig, title)
-    save_path = pdijksta_dir + file_title
+    if hasattr(fig, '__len__'):
+        for f in fig: pdijksta(f)
+    else:
+        file_title = get_file_title(fig, title)
+        save_path = pdijksta_dir + file_title
 
-    fig.set_size_inches(16*1.5, 9*1.5)
-    fig.savefig(save_path, dpi=200)
-    print('Saved in %s' % save_path)
+        #fig.set_size_inches(16*1.5, 9*1.5)
+        fig.savefig(save_path, dpi=200)
+        print('Saved in\n%s' % save_path)
