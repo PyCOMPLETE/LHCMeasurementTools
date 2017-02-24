@@ -139,6 +139,7 @@ class AlignedTimberData(object):
         for ctr, var in enumerate(variables):
             if var in dictionary:
                 double.append(var)
+                var += '_2'
             dictionary[var] = data[:,ctr]
         if double:
             print('Duplicate variables: %s' % double)
