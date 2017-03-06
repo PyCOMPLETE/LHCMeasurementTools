@@ -10,7 +10,7 @@ timb_timestamp2float_UTC= lambda time_string: calendar.timegm(time.strptime(time
 def UnixTimeStamp2UTCTimberTimeString(t):
     return time.strftime('%Y-%m-%d %H:%M:%S.000', time.gmtime(t))
 
-class timber_data_line:
+class timber_data_line(object):
     def __init__(self, rline, time_input_UTC = False):
         list_values = rline.split(',')
         t_string = list_values[0]
@@ -22,7 +22,7 @@ class timber_data_line:
             self.ms = float(t_string.split('.')[-1])
         self.data_strings = list_values[1:]
 
-class timber_variable_list:
+class timber_variable_list(object):
     def __init__(self):
         self.t_stamps = []
         self.ms = []
@@ -37,6 +37,10 @@ class timber_variable_list:
             index -= 1
         return self.values[index]
 
+    def nearest_t_stamp(self, value):
+        index = np.argmin(np.abs(np.array(self.values) - value))
+        return self.t_stamps[index]
+
     def calc_avg(self, begin, end):
         return np.mean(self.selection(begin, end))
 
@@ -47,6 +51,19 @@ class timber_variable_list:
         except:
             print(self.values.shape, self.t_stamps.shape)
             raise
+    def interp(self, t_stamps):
+        return np.interp(t_stamps, self.t_stamps, self.values)
+
+
+def make_timber_variable_list(t_stamps, values, ms=None):
+    if ms == None:
+        ms = np.zeros_like(t_stamps)
+    assert len(t_stamps) == len(values) == len(ms)
+    tvl = timber_variable_list()
+    tvl.ms = ms
+    tvl.t_stamps = t_stamps
+    tvl.values = values
+    return tvl
 
 def parse_timber_file(timber_filename, verbose=False):
 
