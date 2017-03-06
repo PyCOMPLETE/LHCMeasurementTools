@@ -36,7 +36,8 @@ def pdijksta(fig, title=None):
     else:
         file_title = get_file_title(fig, title)
         save_path = pdijksta_dir + file_title
-        #fig.set_size_inches(16*1.5, 9*1.5)
+        fig.set_size_inches(10,10)
+        #fig.subplots_adjust(left=0.07, right=0.90, wspace=0.42)
         fig.savefig(save_path, dpi=200)
         print('Saved in\n%s' % save_path)
 
