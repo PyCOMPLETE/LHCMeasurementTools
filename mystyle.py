@@ -55,8 +55,8 @@ def figure(title, figs=None, figsize=(12, 10), **kwargs):
     if figs != None:
         figs.append(fig)
     fig.patch.set_facecolor('w')
-    plt.suptitle(title, fontsize=20)
-    fig.subplots_adjust(left=0.07, right=0.90, wspace=0.36)
+    plt.suptitle(title, fontsize=16)
+    fig.subplots_adjust(left=0.07, right=0.80, wspace=0.5)
     return fig
 
 
