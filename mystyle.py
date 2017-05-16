@@ -1,20 +1,36 @@
 from matplotlib import rc, rcdefaults, RcParams
+import matplotlib
 import pylab as pl
 from colorsys import hsv_to_rgb
 import matplotlib.pyplot as plt
 
 
 def mystyle(fontsz=16):
+    rcdefaults()
+    version = matplotlib.__version__.split('.')[0]
+    if version == '2':
+        print('Reverting matplotlib look to v1.5')
+        plt.rcParams['axes.autolimit_mode'] = 'round_numbers'
+        plt.rcParams['axes.xmargin'] = 0
+        plt.rcParams['axes.ymargin'] = 0
+        plt.rcParams['xtick.direction'] = 'in'
+        plt.rcParams['ytick.direction'] = 'in'
+        plt.rcParams['xtick.top'] = True
+        plt.rcParams['ytick.right'] = True
+        plt.rcParams['legend.numpoints'] = 1
+        plt.style.use('classic')
+
+
+
     font = {#'family' : 'normal',
             #'weight' : 'bold',
             'size'   : fontsz}
 #   print fontsz
-    rcdefaults()
     rc('font', **font)
 
 def mystyle_arial(fontsz=16, dist_tick_lab=10):
 
-    rcdefaults()
+    mystyle(fontsz)
     rc('font',**{'family':'sans-serif','sans-serif':['arial'], 'size':fontsz})
     rc(('xtick.major','xtick.minor','ytick.major','ytick.minor'), pad=dist_tick_lab)
 
