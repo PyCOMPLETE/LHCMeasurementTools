@@ -42,6 +42,9 @@ def arc_average_correction_factors():
     corr_factors = [1.3, 1.24, 1.22, 1.28, 1.26, 1.22, 1.24, 1.3]
 
     return corr_factors
+    
+    
+
 
 
 average_arcs_variable_list = variable_list
@@ -69,15 +72,24 @@ variable_lists_heatloads['IT_IR5'] = 'QRLGD_03L5_QBS947.POSST QRLGB_03R5_QBS947.
 variable_lists_heatloads['IT_IR2'] = 'QRLGF_03L2_QBS947.POSST QRLGE_03R2_QBS947.POSST'.split()
 variable_lists_heatloads['IT_IR8'] = 'QRLGF_03L8_QBS947.POSST QRLGE_03R8_QBS947.POSST'.split()
 
-variable_lists_heatloads['special_HC_Q1'] = 'QRLAA_13L5_QBS943_Q1.POSST QRLAA_33L5_QBS947_Q1.POSST QRLAA_13R4_QBS947_Q1.POSST'.split()
-variable_lists_heatloads['special_HC_D2'] = 'QRLAA_13L5_QBS943_D2.POSST QRLAA_13R4_QBS947_D2.POSST QRLAA_33L5_QBS947_D2.POSST'.split()
-variable_lists_heatloads['special_HC_D3'] = 'QRLAA_13L5_QBS943_D3.POSST QRLAA_13R4_QBS947_D3.POSST QRLAA_33L5_QBS947_D3.POSST'.split()
-variable_lists_heatloads['special_HC_D4'] = 'QRLAA_13R4_QBS947_D4.POSST QRLAA_33L5_QBS947_D4.POSST QRLAA_13L5_QBS943_D4.POSST'.split()
-variable_lists_heatloads['special_total'] = 'QRLAA_13R4_QBS947.POSST QRLAA_33L5_QBS947.POSST QRLAA_13L5_QBS943.POSST'.split()
+variable_lists_heatloads['special_HC_Q1'] = 'QRLAA_13L5_QBS943_Q1.POSST QRLAA_33L5_QBS947_Q1.POSST QRLAA_13R4_QBS947_Q1.POSST QRLAB_31L2_QBS943_Q1.POSST'.split()
+variable_lists_heatloads['special_HC_D2'] = 'QRLAA_13L5_QBS943_D2.POSST QRLAA_13R4_QBS947_D2.POSST QRLAA_33L5_QBS947_D2.POSST QRLAB_31L2_QBS943_D2.POSST'.split()
+variable_lists_heatloads['special_HC_D3'] = 'QRLAA_13L5_QBS943_D3.POSST QRLAA_13R4_QBS947_D3.POSST QRLAA_33L5_QBS947_D3.POSST QRLAB_31L2_QBS943_D3.POSST'.split()
+variable_lists_heatloads['special_HC_D4'] = 'QRLAA_13R4_QBS947_D4.POSST QRLAA_33L5_QBS947_D4.POSST QRLAA_13L5_QBS943_D4.POSST QRLAB_31L2_QBS943_D4.POSST'.split()
+variable_lists_heatloads['special_total'] = 'QRLAA_13R4_QBS947.POSST QRLAA_33L5_QBS947.POSST QRLAA_13L5_QBS943.POSST QRLAB_31L2_QBS943.POSST'.split()
 
 variable_lists_heatloads['MODEL'] = ['LHC.QBS_CALCULATED_ARC_IMPED.B1', 'LHC.QBS_CALCULATED_ARC_IMPED.B2',
                                      'LHC.QBS_CALCULATED_ARC_SYNCH_RAD.B1', 'LHC.QBS_CALCULATED_ARC_SYNCH_RAD.B2',
                                      'LHC.QBS_CALCULATED_ARC.TOTAL']
+                                     
+heat_loads_plot_sets = {}
+for kk in variable_lists_heatloads:
+     heat_loads_plot_sets[kk] = variable_lists_heatloads[kk]                                    
+
+
+heat_loads_plot_sets['dipoles_31L2'] = 'QRLAB_31L2_QBS943_D2.POSST QRLAB_31L2_QBS943_D3.POSST QRLAB_31L2_QBS943_D4.POSST'.split()
+heat_loads_plot_sets['dipoles_13L5'] = 'QRLAA_13L5_QBS943_D2.POSST QRLAA_13L5_QBS943_D3.POSST QRLAA_13L5_QBS943_D4.POSST'.split()
+heat_loads_plot_sets['quadrupole_31L2'] = 'QRLAB_31L2_QBS943_Q1.POSST'.split()
 
 def groups_dict():
     dict_hl_groups = {}
@@ -179,7 +191,7 @@ def groups_length_dict(length='cryogenic_length'):
     dict_len_groups['Q6s'] = []
     dict_len_groups['Q4D2s'] = []
     dict_len_groups['special_HC_Q1'] = []
-    dict_len_groups['special_HC_dipoles'] = [] 
+    dict_len_groups['special_HC_dipoles'] = []
     dict_len_groups['special_HC_total'] = []
 
 
@@ -217,7 +229,7 @@ def groups_length_dict(length='cryogenic_length'):
 
 def sector_all_variables(sectors):
     sectors = np.array(sectors, ndmin=1)
-    
+
     sector_variable_list = []
     for sector in sectors:
         sector_R = str(sector)[0]
@@ -226,9 +238,9 @@ def sector_all_variables(sectors):
         variable_list_R = ['QRLBA_09R','QRLAB_11R','QRLAA_13R','QRLAB_15R','QRLAA_17R','QRLAB_19R','QRLAA_21R',
                            'QRLAB_23R','QRLAA_25R','QRLAB_27R','QRLAA_29R','QRLAC_31R','QRLAD_33R']
         variable_list_L = ['QRLAA_33L','QRLAB_31L','QRLAA_29L','QRLAB_27L','QRLAA_25L','QRLAB_23L','QRLAA_21L',
-                           'QRLAB_19L','QRLAA_17L','QRLAB_15L','QRLAA_13L','QRLAB_11L','QRLBA_09L', 
+                           'QRLAB_19L','QRLAA_17L','QRLAB_15L','QRLAA_13L','QRLAB_11L','QRLBA_09L',
                            'QRLBB_09L','QRLAH_11L','QRLAG_13L','QRLAH_15L','QRLAG_17L','QRLAF_25L','QRLAE_25L']#this line is for special cases
-    
+
         for variable in variable_list_R:
             for nqbs in [943,947]:
                 curr_variable = variable+'%s_QBS%d.POSST'%(sector_R, nqbs)
@@ -239,22 +251,22 @@ def sector_all_variables(sectors):
                 sector_variable_list.append(curr_variable)
 
     return sector_variable_list
-    
+
 def get_dict_magnet_lengths():
     dict_lengths = {}
     for kk in variable_lists_heatloads.keys():
         for device in variable_lists_heatloads[kk]:
             dict_lengths[device] = magnet_length[kk][0]
     return dict_lengths
-    
+
 def get_dict_cryostat_lengths():
     dict_lengths = {}
     for kk in variable_lists_heatloads.keys():
         for device in variable_lists_heatloads[kk]:
             dict_lengths[device] = cryogenic_length[kk][0]
     return dict_lengths
-    
-    
+
+
 arcs_varnames_static = [\
  'QRLBA_09L5_QBS943.POSST',
  'QRLAA_13L8_QBS947.POSST',
