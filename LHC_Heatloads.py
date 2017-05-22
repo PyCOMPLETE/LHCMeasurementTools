@@ -91,24 +91,40 @@ heat_loads_plot_sets['dipoles_31L2'] = 'QRLAB_31L2_QBS943_D2.POSST QRLAB_31L2_QB
 heat_loads_plot_sets['dipoles_13L5'] = 'QRLAA_13L5_QBS943_D2.POSST QRLAA_13L5_QBS943_D3.POSST QRLAA_13L5_QBS943_D4.POSST'.split()
 heat_loads_plot_sets['quadrupole_31L2'] = 'QRLAB_31L2_QBS943_Q1.POSST'.split()
 
+
+heat_loads_plot_sets['InnerTriplets_IR15'] = variable_lists_heatloads['IT_IR1']+variable_lists_heatloads['IT_IR5']
+heat_loads_plot_sets['InnerTriplets_IR28'] = variable_lists_heatloads['IT_IR2']+variable_lists_heatloads['IT_IR8']
+heat_loads_plot_sets['Arcs'] = variable_lists_heatloads['AVG_ARC']
+heat_loads_plot_sets['Q5s_IR15'] = variable_lists_heatloads['Q5s_IR1']+variable_lists_heatloads['Q5s_IR5']
+heat_loads_plot_sets['Q5s_IR28'] = variable_lists_heatloads['Q5s_IR2']+variable_lists_heatloads['Q5s_IR8']
+heat_loads_plot_sets['Q6s_IR15'] = variable_lists_heatloads['Q6s_IR1']+variable_lists_heatloads['Q6s_IR5']
+heat_loads_plot_sets['Q6s_IR28'] = variable_lists_heatloads['Q6s_IR2']+variable_lists_heatloads['Q6s_IR8']
+heat_loads_plot_sets['special_HC_Q1']	= variable_lists_heatloads['special_HC_Q1']
+heat_loads_plot_sets['special_HC_dipoles'] = variable_lists_heatloads['special_HC_D2']+\
+                  variable_lists_heatloads['special_HC_D3']+variable_lists_heatloads['special_HC_D4']
+heat_loads_plot_sets['Q4D2s_IR15'] = variable_lists_heatloads['Q4D2s_IR1']+ variable_lists_heatloads['Q4D2s_IR5']
+heat_loads_plot_sets['Q4D2s_IR28'] = variable_lists_heatloads['Q4D2s_IR2']+ variable_lists_heatloads['Q4D2s_IR8']
+
+
 def groups_dict():
-    dict_hl_groups = {}
-    dict_hl_groups['InnerTriplets'] = variable_lists_heatloads['IT_IR1']+variable_lists_heatloads['IT_IR5']+\
-        variable_lists_heatloads['IT_IR2']+variable_lists_heatloads['IT_IR8']
-    dict_hl_groups['Arcs'] = variable_lists_heatloads['AVG_ARC']
-    dict_hl_groups['Q5s'] = variable_lists_heatloads['Q5s_IR1']+variable_lists_heatloads['Q5s_IR5']+\
-        variable_lists_heatloads['Q5s_IR2']+variable_lists_heatloads['Q5s_IR8']
-    dict_hl_groups['Q6s'] = variable_lists_heatloads['Q6s_IR1']+variable_lists_heatloads['Q6s_IR5']+\
-        variable_lists_heatloads['Q6s_IR2']+variable_lists_heatloads['Q6s_IR8']
-    dict_hl_groups['Q4D2s'] =  variable_lists_heatloads['Q4D2s_IR1']+ variable_lists_heatloads['Q4D2s_IR5']+\
-        variable_lists_heatloads['Q4D2s_IR2']+ variable_lists_heatloads['Q4D2s_IR8']
+    #~ dict_hl_groups = {}
+    #~ dict_hl_groups['InnerTriplets'] = variable_lists_heatloads['IT_IR1']+variable_lists_heatloads['IT_IR5']+\
+        #~ variable_lists_heatloads['IT_IR2']+variable_lists_heatloads['IT_IR8']
+    #~ dict_hl_groups['Arcs'] = variable_lists_heatloads['AVG_ARC']
+    #~ dict_hl_groups['Q5s'] = variable_lists_heatloads['Q5s_IR1']+variable_lists_heatloads['Q5s_IR5']+\
+        #~ variable_lists_heatloads['Q5s_IR2']+variable_lists_heatloads['Q5s_IR8']
+    #~ dict_hl_groups['Q6s'] = variable_lists_heatloads['Q6s_IR1']+variable_lists_heatloads['Q6s_IR5']+\
+        #~ variable_lists_heatloads['Q6s_IR2']+variable_lists_heatloads['Q6s_IR8']
+    #~ dict_hl_groups['Q4D2s'] =  variable_lists_heatloads['Q4D2s_IR1']+ variable_lists_heatloads['Q4D2s_IR5']+\
+        #~ variable_lists_heatloads['Q4D2s_IR2']+ variable_lists_heatloads['Q4D2s_IR8']
 
-    dict_hl_groups['special_HC_Q1']	= variable_lists_heatloads['special_HC_Q1']
-    dict_hl_groups['special_HC_dipoles'] = variable_lists_heatloads['special_HC_D2']+\
-        variable_lists_heatloads['special_HC_D3']+variable_lists_heatloads['special_HC_D4']
-    dict_hl_groups['special_HC_total'] = variable_lists_heatloads['special_total']
+    #~ dict_hl_groups['special_HC_Q1']	= variable_lists_heatloads['special_HC_Q1']
+    #~ dict_hl_groups['special_HC_dipoles'] = variable_lists_heatloads['special_HC_D2']+\
+        #~ variable_lists_heatloads['special_HC_D3']+variable_lists_heatloads['special_HC_D4']
+    #~ dict_hl_groups['special_HC_total'] = variable_lists_heatloads['special_total']
+    raise ValueError('Feature Discontinued!')
 
-    return dict_hl_groups
+    #~ return heat_loads_plot_sets
 
 
 cryogenic_length = {}
