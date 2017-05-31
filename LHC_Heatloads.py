@@ -42,8 +42,8 @@ def arc_average_correction_factors():
     corr_factors = [1.3, 1.24, 1.22, 1.28, 1.26, 1.22, 1.24, 1.3]
 
     return corr_factors
-    
-    
+
+
 
 
 
@@ -81,10 +81,10 @@ variable_lists_heatloads['special_total'] = 'QRLAA_13R4_QBS947.POSST QRLAA_33L5_
 variable_lists_heatloads['MODEL'] = ['LHC.QBS_CALCULATED_ARC_IMPED.B1', 'LHC.QBS_CALCULATED_ARC_IMPED.B2',
                                      'LHC.QBS_CALCULATED_ARC_SYNCH_RAD.B1', 'LHC.QBS_CALCULATED_ARC_SYNCH_RAD.B2',
                                      'LHC.QBS_CALCULATED_ARC.TOTAL']
-                                     
+
 heat_loads_plot_sets = {}
 for kk in variable_lists_heatloads:
-     heat_loads_plot_sets[kk] = variable_lists_heatloads[kk]                                    
+     heat_loads_plot_sets[kk] = variable_lists_heatloads[kk]
 
 
 heat_loads_plot_sets['dipoles_31L2'] = 'QRLAB_31L2_QBS943_D2.POSST QRLAB_31L2_QBS943_D3.POSST QRLAB_31L2_QBS943_D4.POSST'.split()

@@ -2,7 +2,7 @@ import numpy as np
 import TimberManager as tm
 
 class SetOfHomogeneousNumericVariables:
-    def __init__(self, variable_list, timber_variables):
+    def __init__(self, variable_list, timber_variables, skip_not_found=False):
 
         self.variable_list = variable_list
 
@@ -13,6 +13,11 @@ class SetOfHomogeneousNumericVariables:
 
         self.timber_variables = {}
         for var_name in self.variable_list:
+            if skip_not_found and var_name not in dict_timber.keys():
+                print "Variable %s not found"%var_name
+                continue
+            
+            
             self.timber_variables[var_name] = dict_timber[var_name]
             self.timber_variables[var_name].t_stamps = np.array(self.timber_variables[var_name].t_stamps,dtype=float)
 
