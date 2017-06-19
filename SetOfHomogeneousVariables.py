@@ -2,9 +2,9 @@ import numpy as np
 import TimberManager as tm
 
 class SetOfHomogeneousNumericVariables:
-    def __init__(self, variable_list, timber_variables):
+    def __init__(self, variable_list, timber_variables, skip_not_found=False):
 
-        self.variable_list = variable_list
+        self.variable_list = []
 
         if type(timber_variables) is str:
             dict_timber = tm.parse_timber_file(timber_variables, verbose=False)
@@ -12,7 +12,12 @@ class SetOfHomogeneousNumericVariables:
             dict_timber = timber_variables
 
         self.timber_variables = {}
-        for var_name in self.variable_list:
+        for var_name in variable_list:
+            if skip_not_found and var_name not in dict_timber.keys():
+                print "Variable %s not found"%var_name
+                continue
+            
+            
             self.timber_variables[var_name] = dict_timber[var_name]
             self.timber_variables[var_name].t_stamps = np.array(self.timber_variables[var_name].t_stamps,dtype=float)
 
@@ -26,6 +31,8 @@ class SetOfHomogeneousNumericVariables:
                     axis = 0
                 if axis != -1:
                    self.timber_variables[var_name].values = np.squeeze(self.timber_variables[var_name].values, axis=axis)
+                   
+            self.variable_list.append(var_name)
 
     def aligned(self):
         aligned_list = []
