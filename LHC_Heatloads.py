@@ -42,8 +42,8 @@ def arc_average_correction_factors():
     corr_factors = [1.3, 1.24, 1.22, 1.28, 1.26, 1.22, 1.24, 1.3]
 
     return corr_factors
-    
-    
+
+
 
 
 
@@ -78,18 +78,26 @@ variable_lists_heatloads['special_HC_D3'] = 'QRLAA_13L5_QBS943_D3.POSST QRLAA_13
 variable_lists_heatloads['special_HC_D4'] = 'QRLAA_13R4_QBS947_D4.POSST QRLAA_33L5_QBS947_D4.POSST QRLAA_13L5_QBS943_D4.POSST QRLAB_31L2_QBS943_D4.POSST'.split()
 variable_lists_heatloads['special_total'] = 'QRLAA_13R4_QBS947.POSST QRLAA_33L5_QBS947.POSST QRLAA_13L5_QBS943.POSST QRLAB_31L2_QBS943.POSST'.split()
 
+# Deprecated! Old variables are wrong!
 variable_lists_heatloads['MODEL'] = ['LHC.QBS_CALCULATED_ARC_IMPED.B1', 'LHC.QBS_CALCULATED_ARC_IMPED.B2',
                                      'LHC.QBS_CALCULATED_ARC_SYNCH_RAD.B1', 'LHC.QBS_CALCULATED_ARC_SYNCH_RAD.B2',
                                      'LHC.QBS_CALCULATED_ARC.TOTAL']
-                                     
+
 heat_loads_plot_sets = {}
 for kk in variable_lists_heatloads:
-     heat_loads_plot_sets[kk] = variable_lists_heatloads[kk]                                    
+     heat_loads_plot_sets[kk] = variable_lists_heatloads[kk]
 
 
 heat_loads_plot_sets['dipoles_31L2'] = 'QRLAB_31L2_QBS943_D2.POSST QRLAB_31L2_QBS943_D3.POSST QRLAB_31L2_QBS943_D4.POSST'.split()
 heat_loads_plot_sets['dipoles_13L5'] = 'QRLAA_13L5_QBS943_D2.POSST QRLAA_13L5_QBS943_D3.POSST QRLAA_13L5_QBS943_D4.POSST'.split()
+heat_loads_plot_sets['dipoles_33L5'] = 'QRLAA_33L5_QBS947_D2.POSST QRLAA_33L5_QBS947_D3.POSST QRLAA_33L5_QBS947_D4.POSST'.split()
+heat_loads_plot_sets['dipoles_13R4'] = 'QRLAA_13R4_QBS947_D2.POSST QRLAA_13R4_QBS947_D3.POSST QRLAA_13R4_QBS947_D4.POSST'.split()
+
 heat_loads_plot_sets['quadrupole_31L2'] = 'QRLAB_31L2_QBS943_Q1.POSST'.split()
+heat_loads_plot_sets['quadrupole_13L5'] = 'QRLAA_13L5_QBS943_Q1.POSST'.split()
+heat_loads_plot_sets['quadrupole_33L5'] = 'QRLAA_33L5_QBS947_Q1.POSST'.split()
+heat_loads_plot_sets['quadrupole_13R4'] = 'QRLAA_13R4_QBS947_Q1.POSST'.split()
+
 
 
 heat_loads_plot_sets['InnerTriplets_IR15'] = variable_lists_heatloads['IT_IR1']+variable_lists_heatloads['IT_IR5']
@@ -187,6 +195,7 @@ magnet_length['special_HC_Q1'] = [3.1]
 magnet_length['special_HC_D2'] = [14.3]
 magnet_length['special_HC_D3'] = [14.3]
 magnet_length['special_HC_D4'] = [14.3]
+magnet_length['special_HC_dipoles'] = [14.3]
 magnet_length['special_total'] = [53.45]
 
 

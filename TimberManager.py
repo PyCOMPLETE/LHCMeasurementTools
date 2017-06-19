@@ -65,7 +65,7 @@ def make_timber_variable_list(t_stamps, values, ms=None):
     tvl.values = values
     return tvl
 
-def parse_timber_file(timber_filename, verbose=False):
+def parse_timber_file(timber_filename, verbose=True):
 
     with open(timber_filename) as fid:
         timber_lines = fid.readlines()

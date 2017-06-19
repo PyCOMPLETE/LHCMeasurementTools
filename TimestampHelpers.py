@@ -57,12 +57,14 @@ class TimeConverter(object):
             hfmt = matplotlib.dates.DateFormatter('%a %d-%m %H:%M')
             ax.xaxis.set_major_formatter(hfmt)
             if self.t_plot_tick_h is not None:
-                if self.t_plot_tick_h<24:
-                    ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(np.arange(0, 24, self.t_plot_tick_h)))
-                elif self.t_plot_tick_h=='week':
+                if self.t_plot_tick_h=='week':
                     ax.xaxis.set_major_locator(matplotlib.dates.WeekdayLocator(0))
                 elif self.t_plot_tick_h=='2weeks':
                     ax.xaxis.set_major_locator(matplotlib.dates.WeekdayLocator(0, interval=2))
                 elif self.t_plot_tick_h=='4weeks':
                     ax.xaxis.set_major_locator(matplotlib.dates.WeekdayLocator(0, interval=4))
+                elif self.t_plot_tick_h<24:
+                    ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(np.arange(0, 24, self.t_plot_tick_h)))
+                else:
+                    ax.set_xticks(np.arange(ax.get_xticks()[0], ax.get_xticks()[-1], self.t_plot_tick_h/24.))                    
             fig.autofmt_xdate()
