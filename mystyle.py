@@ -3,6 +3,7 @@ import matplotlib
 import pylab as pl
 from colorsys import hsv_to_rgb
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def mystyle(fontsz=16):
@@ -40,11 +41,15 @@ def sciy():
 def scix():
     pl.gca().ticklabel_format(style='sci', scilimits=(0,0),axis='x')
 
-def colorprog(i_prog, Nplots, v1 = .9, v2 = 1.):
+def colorprog(i_prog, Nplots, v1 = .9, v2 = 1., cm='hsv'):
     if hasattr(Nplots, '__len__'):
         Nplots = len(Nplots)
-    return hsv_to_rgb(float(i_prog)/float(Nplots), v1, v2)
-    #return [pl.cm.rainbow(k) for k in np.linspace(0, 1, Nplots)][i_prog]
+    if cm == 'hsv':
+        return hsv_to_rgb(float(i_prog)/float(Nplots), v1, v2)
+    elif cm == 'rainbow':
+        return [pl.cm.rainbow(k) for k in np.linspace(0, 1, Nplots)][i_prog]
+    else:
+        raise ValueError('What?!')
 
 def comb_legend(sp1, sp2, *args, **kwargs):
     """
