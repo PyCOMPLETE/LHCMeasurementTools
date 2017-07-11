@@ -113,6 +113,8 @@ heat_loads_plot_sets['special_HC_dipoles'] = variable_lists_heatloads['special_H
 heat_loads_plot_sets['Q4D2s_IR15'] = variable_lists_heatloads['Q4D2s_IR1']+ variable_lists_heatloads['Q4D2s_IR5']
 heat_loads_plot_sets['Q4D2s_IR28'] = variable_lists_heatloads['Q4D2s_IR2']+ variable_lists_heatloads['Q4D2s_IR8']
 
+heat_loads_plot_sets['Q6s_IR37'] = 'QRLEA_06L3_QBS947.POSST QRLEA_06L7_QBS947.POSST QRLEA_06R3_QBS947.POSST QRLEA_06R7_QBS947.POSST'.split()
+
 
 def groups_dict():
     #~ dict_hl_groups = {}
@@ -705,4 +707,11 @@ arcs_varnames_static = [\
  'QRLAA_29L3_QBS943.POSST',
  'QRLBA_09L4_QBS943.POSST',
  'QRLAA_13L8_QBS943.POSST']
+
+#traditionally not dowloaded 
+other_varnames_static=[\
+'QRLEA_06L3_QBS947.POSST',
+'QRLEA_06L7_QBS947.POSST',
+'QRLEA_06R3_QBS947.POSST',
+'QRLEA_06R7_QBS947.POSST']
 
