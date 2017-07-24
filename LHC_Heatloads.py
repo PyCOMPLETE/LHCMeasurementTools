@@ -108,8 +108,10 @@ heat_loads_plot_sets['Q5s_IR28'] = variable_lists_heatloads['Q5s_IR2']+variable_
 heat_loads_plot_sets['Q6s_IR15'] = variable_lists_heatloads['Q6s_IR1']+variable_lists_heatloads['Q6s_IR5']
 heat_loads_plot_sets['Q6s_IR28'] = variable_lists_heatloads['Q6s_IR2']+variable_lists_heatloads['Q6s_IR8']
 heat_loads_plot_sets['special_HC_Q1']	= variable_lists_heatloads['special_HC_Q1']
-heat_loads_plot_sets['special_HC_dipoles'] = variable_lists_heatloads['special_HC_D2']+\
-                  variable_lists_heatloads['special_HC_D3']+variable_lists_heatloads['special_HC_D4']
+heat_loads_plot_sets['special_HC_dipoles'] = heat_loads_plot_sets['dipoles_31L2'] + heat_loads_plot_sets['dipoles_13L5'] + heat_loads_plot_sets['dipoles_33L5'] +heat_loads_plot_sets['dipoles_13R4']
+
+
+
 heat_loads_plot_sets['Q4D2s_IR15'] = variable_lists_heatloads['Q4D2s_IR1']+ variable_lists_heatloads['Q4D2s_IR5']
 heat_loads_plot_sets['Q4D2s_IR28'] = variable_lists_heatloads['Q4D2s_IR2']+ variable_lists_heatloads['Q4D2s_IR8']
 
@@ -708,10 +710,13 @@ arcs_varnames_static = [\
  'QRLBA_09L4_QBS943.POSST',
  'QRLAA_13L8_QBS943.POSST']
 
-#traditionally not dowloaded 
-other_varnames_static=[\
-'QRLEA_06L3_QBS947.POSST',
-'QRLEA_06L7_QBS947.POSST',
-'QRLEA_06R3_QBS947.POSST',
-'QRLEA_06R7_QBS947.POSST']
+#traditionally not dowloaded
+other_varnames_static=[
+    'QRLEA_06L3_QBS947.POSST',
+    'QRLEA_06L7_QBS947.POSST',
+    'QRLEA_06R3_QBS947.POSST',
+    'QRLEA_06R7_QBS947.POSST',
+    'QRLEB_05L4_QBS947.POSST',
+    'QRLEB_05R4_QBS947.POSST',
+]
 
