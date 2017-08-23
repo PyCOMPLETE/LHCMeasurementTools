@@ -117,6 +117,9 @@ heat_loads_plot_sets['Q4D2s_IR28'] = variable_lists_heatloads['Q4D2s_IR2']+ vari
 
 heat_loads_plot_sets['Q6s_IR37'] = 'QRLEA_06L3_QBS947.POSST QRLEA_06L7_QBS947.POSST QRLEA_06R3_QBS947.POSST QRLEA_06R7_QBS947.POSST'.split()
 
+heat_loads_plot_sets['D3s_IR4'] = ['QRLEB_05L4_QBS947.POSST', 'QRLEB_05R4_QBS947.POSST']
+
+
 
 def groups_dict():
     #~ dict_hl_groups = {}
@@ -718,5 +721,7 @@ other_varnames_static=[
     'QRLEA_06R7_QBS947.POSST',
     'QRLEB_05L4_QBS947.POSST',
     'QRLEB_05R4_QBS947.POSST',
+    'QRLFE_05R4_QBS947.POSST',
+    'QRLFF_05L4_QBS947.POSST'    
 ]
 
