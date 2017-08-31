@@ -99,6 +99,12 @@ heat_loads_plot_sets['quadrupole_33L5'] = 'QRLAA_33L5_QBS947_Q1.POSST'.split()
 heat_loads_plot_sets['quadrupole_13R4'] = 'QRLAA_13R4_QBS947_Q1.POSST'.split()
 
 
+for key in ['dipoles_31L2', 'dipoles_13L5', 'dipoles_33L5','dipoles_13R4', 'quadrupole_31L2', 'quadrupole_13L5', 'quadrupole_33L5', 'quadrupole_13R4',]:
+    for beam in (1,2):
+        str_ = '_B%i' % beam
+        heat_loads_plot_sets[key+str_] = map(lambda x: x+str_, heat_loads_plot_sets[key])
+
+
 
 heat_loads_plot_sets['InnerTriplets_IR15'] = variable_lists_heatloads['IT_IR1']+variable_lists_heatloads['IT_IR5']
 heat_loads_plot_sets['InnerTriplets_IR28'] = variable_lists_heatloads['IT_IR2']+variable_lists_heatloads['IT_IR8']
@@ -722,6 +728,6 @@ other_varnames_static=[
     'QRLEB_05L4_QBS947.POSST',
     'QRLEB_05R4_QBS947.POSST',
     'QRLFE_05R4_QBS947.POSST',
-    'QRLFF_05L4_QBS947.POSST'    
+    'QRLFF_05L4_QBS947.POSST'
 ]
 
