@@ -31,10 +31,13 @@ def unixstampNow():
         return time.mktime(time.localtime())
 
 class TimeConverter(object):
-    def __init__(self, time_in, t_ref=0, t_plot_tick_h=None):
+    def __init__(self, time_in, t_ref=0, t_plot_tick_h=None, show_weekday=True, show_day_month_year=False, show_month_year=False):
         self.time_in = time_in
         self.t_ref = t_ref
         self.t_plot_tick_h = t_plot_tick_h
+        self.show_weekday = show_weekday
+        self.show_day_month_year = show_day_month_year
+        self.show_month_year = show_month_year
 
     def from_unix(self, t_stamps):
         if self.time_in == 'h':
@@ -54,7 +57,14 @@ class TimeConverter(object):
                 ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(np.arange(0, 24, self.t_plot_tick_h)))
 
         if self.time_in == 'datetime':
-            hfmt = matplotlib.dates.DateFormatter('%a %d-%m %H:%M')
+            if self.show_month_year:
+                hfmt = matplotlib.dates.DateFormatter('%m-%y')
+            elif self.show_day_month_year:
+                hfmt = matplotlib.dates.DateFormatter('%d-%m-%y')
+            elif self.show_weekday:
+                hfmt = matplotlib.dates.DateFormatter('%a %d-%m %H:%M')
+            else:
+                hfmt = matplotlib.dates.DateFormatter('%d-%m %H:%M')
             ax.xaxis.set_major_formatter(hfmt)
             if self.t_plot_tick_h is not None:
                 if self.t_plot_tick_h=='week':
@@ -66,5 +76,5 @@ class TimeConverter(object):
                 elif self.t_plot_tick_h<24:
                     ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(np.arange(0, 24, self.t_plot_tick_h)))
                 else:
-                    ax.set_xticks(np.arange(ax.get_xticks()[0], ax.get_xticks()[-1], self.t_plot_tick_h/24.))                    
+                    ax.set_xticks(np.arange(ax.get_xticks()[0], ax.get_xticks()[-1], self.t_plot_tick_h/24.))
             fig.autofmt_xdate()
