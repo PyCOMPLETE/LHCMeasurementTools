@@ -20,13 +20,12 @@ def save_to_h5(filename, fill_dict):
             h5_handle.create_dataset(varname+'!t_stamps', data=timber_variable_list.t_stamps)
             h5_handle.create_dataset(varname+'!values', data=timber_variable_list.values)
 
-def get_fill_dict(variable_list, t_start, t_end):
-    db = pytimber.LoggingDB()
+def get_fill_dict(variable_list, t_start, t_end, db):
     data_period_obj = data_period(t_start, t_end, db)
 
     return {var: data_period_obj[var] for var in variable_list}
 
-def save_variables_to_h5(filename, variable_list, t_start, t_end):
-    fill_dict = get_fill_dict(variable_list, t_start, t_end)
+def save_variables_to_h5(filename, variable_list, t_start, t_end, db):
+    fill_dict = get_fill_dict(variable_list, t_start, t_end, db)
     save_to_h5(filename, fill_dict)
 
