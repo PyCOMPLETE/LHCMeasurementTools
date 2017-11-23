@@ -1,16 +1,17 @@
 import pickle
 import os
 import lhc_log_db_query as lldb
+import numpy as np
 
 
-def save_variables_and_pickle(varlist, file_path_prefix, save_pkl, fills_dict, fill_sublist=None,save_to_pickle=True):
+def save_variables_and_pickle(varlist, file_path_prefix, save_pkl, fills_dict, fill_sublist=None,save_to_pickle=True, save_pickle_every = 0):
     if os.path.isfile(save_pkl):
         with open(save_pkl, 'rb') as fid:
             saved_fills = pickle.load(fid)
     else:
         saved_fills = {}
 
-    for filln in fills_dict.keys():
+    for i_fill, filln in enumerate(sorted(fills_dict.keys())):
 
         if fill_sublist is not None:
             if filln not in fill_sublist:
@@ -33,7 +34,14 @@ def save_variables_and_pickle(varlist, file_path_prefix, save_pkl, fills_dict, f
             saved_fills[filln] = 'complete'
         else:
             saved_fills[filln] = t_end_fill
-
+            
+        if save_pickle_every>0:
+            if int(np.mod(i_fill, save_pickle_every))==0:
+                if save_to_pickle is True:
+                    with open(save_pkl, 'wb') as fid:
+                        pickle.dump(saved_fills, fid)
+                    print '\nSaved pickle!\n'
+                
     if save_to_pickle is True:
         with open(save_pkl, 'wb') as fid:
                 pickle.dump(saved_fills, fid)
