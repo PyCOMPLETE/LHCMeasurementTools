@@ -117,13 +117,14 @@ heat_loads_plot_sets['special_HC_Q1']	= variable_lists_heatloads['special_HC_Q1'
 heat_loads_plot_sets['special_HC_dipoles'] = heat_loads_plot_sets['dipoles_31L2'] + heat_loads_plot_sets['dipoles_13L5'] + heat_loads_plot_sets['dipoles_33L5'] +heat_loads_plot_sets['dipoles_13R4']
 
 
-
 heat_loads_plot_sets['Q4D2s_IR15'] = variable_lists_heatloads['Q4D2s_IR1']+ variable_lists_heatloads['Q4D2s_IR5']
 heat_loads_plot_sets['Q4D2s_IR28'] = variable_lists_heatloads['Q4D2s_IR2']+ variable_lists_heatloads['Q4D2s_IR8']
 
 heat_loads_plot_sets['Q6s_IR37'] = 'QRLEA_06L3_QBS947.POSST QRLEA_06L7_QBS947.POSST QRLEA_06R3_QBS947.POSST QRLEA_06R7_QBS947.POSST'.split()
 
 heat_loads_plot_sets['D3s_IR4'] = ['QRLEB_05L4_QBS947.POSST', 'QRLEB_05R4_QBS947.POSST']
+
+
 
 
 
@@ -149,6 +150,9 @@ def groups_dict():
 
 
 cryogenic_length = {}
+
+for kk in heat_loads_plot_sets.keys():
+    cryogenic_length[kk] = np.nan
 
 cryogenic_length['AVG_ARC'] = [53.45]
 cryogenic_length['MODEL'] = [53.45]
@@ -180,9 +184,16 @@ cryogenic_length['special_HC_D4'] = [14.3]
 cryogenic_length['special_total'] = [53.45]
 
 
+
+
+
+
 magnet_length = {}
+for kk in heat_loads_plot_sets.keys():
+    magnet_length[kk] = np.nan
 
 magnet_length['AVG_ARC'] = [53.45]
+magnet_length['Arcs'] = [53.45]
 magnet_length['MODEL'] = [53.45]
 magnet_length['Q4D2s_IR1'] = [18.08]
 magnet_length['Q4D2s_IR5'] = [18.08]
@@ -210,6 +221,9 @@ magnet_length['special_HC_D3'] = [14.3]
 magnet_length['special_HC_D4'] = [14.3]
 magnet_length['special_HC_dipoles'] = [14.3]
 magnet_length['special_total'] = [53.45]
+
+for kk in 'dipoles_13L5 dipoles_13R4 dipoles_31L2 dipoles_33L5'.split():
+    magnet_length[kk] = [14.3]
 
 
 def groups_length_dict(length='cryogenic_length'):
