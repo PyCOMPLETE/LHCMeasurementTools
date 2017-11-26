@@ -109,8 +109,12 @@ def get_varlist():
     
 class Fills_Info(object):
     def __init__(self, pkl_name):
-        with open(pkl_name, 'rb') as fid:
-            self.dict_fill_bmodes = pickle.load(fid)
+        
+        if type(pkl_name) is dict:
+          self.dict_fill_bmodes = pkl_name
+        else:
+          with open(pkl_name, 'rb') as fid:
+              self.dict_fill_bmodes = pickle.load(fid)
             
     def fills_in_time_window(self, t_start, t_end):
         dict_fill_bmodes=self.dict_fill_bmodes
