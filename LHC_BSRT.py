@@ -241,7 +241,8 @@ class Masked:
     def __init__(self, bsrt, t_start, t_stop):
         self.t_start = t_start
         self.t_stop = t_stop
-        mask_bsrt = np.logical_and(bsrt.t_stamps >= self.t_start, bsrt.t_stamps < self.t_stop)
+        #mask_bsrt = np.logical_and(bsrt.t_stamps >= self.t_start, bsrt.t_stamps < self.t_stop)
+        mask_bsrt = np.logical_and(bsrt.t_stamps > self.t_start, bsrt.t_stamps <= self.t_stop)
 
         self.beam = bsrt.beam
         self.t_stamps = bsrt.t_stamps[mask_bsrt]
