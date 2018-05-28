@@ -116,25 +116,61 @@ class PowerLoss:
 
         elif type(timber_variable) is dict:
             dict_timber = timber_variable
+            
+        if 'filln' in dict_timber.keys():
+            
+            filln = dict_timber['filln']
+            beam = dict_timber['beam']
+            
+            print 'ObsBox mode'
+            from scipy.constants import e as qe
+            import pytimber
+            
+            ldb = pytimber.LoggingDB(source='ldb')
+                       
+            fillinfo = ldb.getLHCFillData(filln)
+            t_start = fillinfo['startTime']
+            t_stop = fillinfo['endTime']
+            
+            
+            cav_list = ['ACSCA.UX45.L%dB%d:CAV_FIELD'%(icav, beam) for icav in range(1, 9)]
 
-        timber_variable_ploss = dict_timber['PHASE']  #abusing a bit the csv_parser
-        timber_variable_bunches = dict_timber['BUNCHES']
-        
-        self.t_stamps = np.float_(np.array(timber_variable_ploss.t_stamps)) 
-        values_raw = np.float_(np.array(timber_variable_ploss.values)) 
-        bunches_raw = np.float_(np.array(timber_variable_bunches.values)) 
-        
-        if len(bunches_raw) == (values_raw.shape[1]+1):
-            print 'WARNING: first bunch seems not to be there! I remove it from the bunch list.'
-            bunches_raw = bunches_raw[1:]
+            print 'Downloading data. This might take a while...'
+            data = {}
+            data.update(ldb.getAligned([u'LONGDIAG.SR4.B%d:STABLE_PHASE_MEAN_REL'%beam, u'LHC.BCTFR.A6R4.B%d:BUNCH_INTENSITY'%beam]+cav_list, 
+                master='LONGDIAG.SR4.B%d:STABLE_PHASE_MEAN_REL'%beam, t1=t_start, t2=t_stop))
+            print 'Done downloading data.'
+            
+            timestamps = data['timestamps']
+            intensity = data['LHC.BCTFR.A6R4.B%d:BUNCH_INTENSITY'%beam]
+            phase = data['LONGDIAG.SR4.B%d:STABLE_PHASE_MEAN_REL'%beam]
+            total_voltage = np.sum(np.array([data[var] for var in cav_list]), axis=0)*1e6
+            
+            T_rev = 88.9e-6 
+            n_slots = len(phase[0])
+            self.power_loss = -qe*np.array(n_slots*[total_voltage]).T*intensity*np.sin(phase*np.pi/360.)/T_rev
+            self.t_stamps = timestamps
+            self.bunches = np.arange(n_slots)
+            
+        else:
+            timber_variable_ploss = dict_timber['PHASE']  #abusing a bit the csv_parser
+            timber_variable_bunches = dict_timber['BUNCHES']
+            
+            self.t_stamps = np.float_(np.array(timber_variable_ploss.t_stamps)) 
+            values_raw = np.float_(np.array(timber_variable_ploss.values)) 
+            bunches_raw = np.float_(np.array(timber_variable_bunches.values)) 
+            
+            if len(bunches_raw) == (values_raw.shape[1]+1):
+                print 'WARNING: first bunch seems not to be there! I remove it from the bunch list.'
+                bunches_raw = bunches_raw[1:]
 
-        # create variables with all bunch slots
-        nslots = 3564
-        self.bunches = np.arange(nslots)
-        self.power_loss = np.zeros((len(self.t_stamps), nslots))
-        for ii in xrange(len(bunches_raw)):
-            bunch = bunches_raw[ii]
-            self.power_loss[:,bunch-1] = values_raw[:,ii] 
+            # create variables with all bunch slots
+            nslots = 3564
+            self.bunches = np.arange(nslots)
+            self.power_loss = np.zeros((len(self.t_stamps), nslots))
+            for ii in xrange(len(bunches_raw)):
+                bunch = bunches_raw[ii]
+                self.power_loss[:,bunch-1] = values_raw[:,ii] 
 
    
 
