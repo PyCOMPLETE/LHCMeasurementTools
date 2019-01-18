@@ -52,6 +52,20 @@ class FBCT:
                 return 0.*self.bint[ind_min]
             else:	
                 return self.bint[ind_min]
+
+    def nearest_sample(self, t_obs, flag_return_time=False):
+        ind_min = np.argmin(np.abs(self.t_stamps - t_obs))
+        if flag_return_time:	
+            if ind_min == -1:
+                return 0.*self.bint[ind_min], -1
+            else:	
+                return self.bint[ind_min], self.t_stamps[ind_min]
+        else:
+            if ind_min == -1:
+                return 0.*self.bint[ind_min]
+            else:	
+                return self.bint[ind_min]
+
                 
 
 		

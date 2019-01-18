@@ -173,6 +173,7 @@ cryogenic_length['special_HC_D3'] = [14.3]
 cryogenic_length['special_HC_D4'] = [14.3]
 cryogenic_length['special_total'] = [53.45]
 
+cryogenic_length['dipoles_31L2'] = [14.3]
 
 magnet_length = {}
 
@@ -204,6 +205,8 @@ magnet_length['special_HC_D3'] = [14.3]
 magnet_length['special_HC_D4'] = [14.3]
 magnet_length['special_HC_dipoles'] = [14.3]
 magnet_length['special_total'] = [53.45]
+
+magnet_length['dipoles_31L2'] = [14.3]
 
 
 def groups_length_dict(length='cryogenic_length'):
@@ -722,6 +725,6 @@ other_varnames_static=[
     'QRLEB_05L4_QBS947.POSST',
     'QRLEB_05R4_QBS947.POSST',
     'QRLFE_05R4_QBS947.POSST',
-    'QRLFF_05L4_QBS947.POSST'    
+    'QRLFF_05L4_QBS947.POSST'
 ]
 
