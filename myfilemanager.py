@@ -1,16 +1,19 @@
 import numpy as np
 
+
 class obj_from_dict:
     def __init__(self, dictto):
-        for key, value in dictto.iteritems():
-            setattr(self, key, value)
-
+        for kk in dictto.keys():
+            setattr(self, kk, dictto[kk])
+            
+            
 def obj_to_dict(obj):
     dict_out={}
     members = dir(obj)
     for member in members:
         dict_out[member] = getattr(obj, member)
     return dict_out
+    
 
 def myloadmat(filename, squeeze = True):
     import scipy.io as sio
@@ -22,61 +25,68 @@ def myloadmat(filename, squeeze = True):
             except:
                 pass
     return dict_var
-
+            
+            
 def myloadmat_to_obj(filename, squeeze = True):
     return  obj_from_dict(myloadmat(filename, squeeze=squeeze))
-
+    
+    
 def dict_of_arrays_and_scalar_from_h5(filename):
     import h5py
-    with h5py.File(filename) as fid:
+    with h5py.File(filename, 'r') as fid:
         f_dict = {}
         for kk in fid.keys():
             f_dict[kk] = np.array(fid[kk]).copy()
             if f_dict[kk].shape == ():
                 f_dict[kk] = f_dict[kk].tolist()
     return  f_dict
-
+    
 def object_with_arrays_and_scalar_from_h5(filename):
     return  obj_from_dict(dict_of_arrays_and_scalar_from_h5(filename))
 
-def bunchh5_to_dict(filename):
+
+def monitorh5_to_dict(filename, key= 'Bunch'):
     import h5py
-    with h5py.File(filename, 'r') as bunch_ev:
-        bunch = bunch_ev['Bunch']
-        bunch_dict = {}
-        for kk in bunch.keys():
-            bunch_dict[kk] = np.array(bunch[kk]).copy()
+    with h5py.File(filename, 'r') as monitor_ev:
+        monitor = monitor_ev[key]
+        monitor_dict = {}
+        for kk in monitor.keys():
+            monitor_dict[kk] = np.array(monitor[kk]).copy()
+        
+    return monitor_dict
+    
 
-    return bunch_dict
-
-def bunchh5_to_obj(filename):
-    return  obj_from_dict(bunchh5_to_dict(filename))
-
-def bunchh5list_to_dict(filename_list):
-    bunch_dict = bunchh5_to_dict(filename_list[0])
+def monitorh5_to_obj(filename, key= 'Bunch'):
+    return  obj_from_dict(monitorh5_to_dict(filename, key))
+    
+def monitorh5list_to_dict(filename_list, key='Bunch', permissive=False):
+    monitor_dict = monitorh5_to_dict(filename_list[0], key=key)
     for i_file in xrange(1,len(filename_list)):
-        bunch_dict_curr = bunchh5_to_dict(filename_list[i_file])
-        for kk in bunch_dict.keys():
-            bunch_dict[kk] = np.array(list(bunch_dict[kk])+list(bunch_dict_curr[kk]))
+        print('Loading '+filename_list[i_file])
+        try:
+            monitor_dict_curr = monitorh5_to_dict(filename_list[i_file])
+            for kk in monitor_dict.keys():
+                monitor_dict[kk] = np.array(list(monitor_dict[kk])+list(monitor_dict_curr[kk]))
+        except IOError as err:
+            print('Got:')
+            print(err)
+            if not permissive:
+                raise err
+    
+    return monitor_dict   
 
-    return bunch_dict
+def monitorh5list_to_obj(filename_list, key= 'Bunch', permissive=False):
+    return  obj_from_dict(monitorh5list_to_dict(filename_list, key, permissive))
 
-def bunchh5list_to_obj(filename_list):
-    return  obj_from_dict(bunchh5list_to_dict(filename_list))
 
-# Only works for not nested h5 files
-def h5_to_obj(filename):
+def dict_to_h5(dict_save, filename):
     import h5py
-    d = {}
-    with h5py.File(filename, 'r') as f:
-        for key in f:
-            d[key] = np.array(f[key])
-    return obj_from_dict(d)
+    with h5py.File(filename, 'w') as fid:
+        for kk in dict_save.keys():
+                fid[kk] = dict_save[kk]
 
-# Only works for not nested attributes of object
-def aligned_obj_to_h5(obj, h5):
-    import h5py
-    with h5py.File(h5, 'w') as h5_handle:
-        h5_handle.create_dataset('timestamps', data=obj.timestamps)
-        h5_handle.create_dataset('variables', data=obj.variables)
-        h5_handle.create_dataset('data', data=obj.data)
+
+
+
+
+
