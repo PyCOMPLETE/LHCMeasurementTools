@@ -177,7 +177,7 @@ class BSRT:
     def find_start_scans(self, scan_thresh):
         diff_bunch = np.diff(self.bunch_n)
         ind_start_scan_all = np.where(diff_bunch < -scan_thresh)[0]
-        ind_start_scan = ind_start_scan_all[np.diff(ind_start_scan_all) > 10]
+        ind_start_scan = ind_start_scan_all[:-1][np.diff(ind_start_scan_all) > 10]
         self.t_start_scans = self.t_stamps[ind_start_scan]
         self.t_start_scans = np.array(list(self.t_start_scans)+[self.t_stamps[-1]])
 
