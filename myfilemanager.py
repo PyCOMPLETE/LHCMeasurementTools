@@ -5,15 +5,15 @@ class obj_from_dict:
     def __init__(self, dictto):
         for kk in dictto.keys():
             setattr(self, kk, dictto[kk])
-            
-            
+
+
 def obj_to_dict(obj):
     dict_out={}
     members = dir(obj)
     for member in members:
         dict_out[member] = getattr(obj, member)
     return dict_out
-    
+
 
 def myloadmat(filename, squeeze = True):
     import scipy.io as sio
@@ -25,12 +25,12 @@ def myloadmat(filename, squeeze = True):
             except:
                 pass
     return dict_var
-            
-            
+
+
 def myloadmat_to_obj(filename, squeeze = True):
     return  obj_from_dict(myloadmat(filename, squeeze=squeeze))
-    
-    
+
+
 def dict_of_arrays_and_scalar_from_h5(filename):
     import h5py
     with h5py.File(filename, 'r') as fid:
@@ -40,7 +40,7 @@ def dict_of_arrays_and_scalar_from_h5(filename):
             if f_dict[kk].shape == ():
                 f_dict[kk] = f_dict[kk].tolist()
     return  f_dict
-    
+
 def object_with_arrays_and_scalar_from_h5(filename):
     return  obj_from_dict(dict_of_arrays_and_scalar_from_h5(filename))
 
@@ -52,13 +52,13 @@ def monitorh5_to_dict(filename, key= 'Bunch'):
         monitor_dict = {}
         for kk in monitor.keys():
             monitor_dict[kk] = np.array(monitor[kk]).copy()
-        
+
     return monitor_dict
-    
+
 
 def monitorh5_to_obj(filename, key= 'Bunch'):
     return  obj_from_dict(monitorh5_to_dict(filename, key))
-    
+
 def monitorh5list_to_dict(filename_list, key='Bunch', permissive=False):
     monitor_dict = monitorh5_to_dict(filename_list[0], key=key)
     for i_file in xrange(1,len(filename_list)):
@@ -72,8 +72,8 @@ def monitorh5list_to_dict(filename_list, key='Bunch', permissive=False):
             print(err)
             if not permissive:
                 raise err
-    
-    return monitor_dict   
+
+    return monitor_dict
 
 def monitorh5list_to_obj(filename_list, key= 'Bunch', permissive=False):
     return  obj_from_dict(monitorh5list_to_dict(filename_list, key, permissive))
@@ -86,7 +86,12 @@ def dict_to_h5(dict_save, filename):
                 fid[kk] = dict_save[kk]
 
 
-
-
-
+# Only works for not nested h5 files
+def h5_to_obj(filename):
+    import h5py
+    d = {}
+    with h5py.File(filename, 'r') as f:
+        for key in f:
+            d[key] = np.array(f[key])
+    return obj_from_dict(d)
 
