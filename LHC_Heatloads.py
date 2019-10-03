@@ -131,6 +131,16 @@ heat_loads_plot_sets['dipoles_13R4_B2'] = 'QRLAA_13R4_QBS947_D2B2.POSST QRLAA_13
 heat_loads_plot_sets['special_HC_dipoles_B2'] = heat_loads_plot_sets['dipoles_31L2_B2'] + heat_loads_plot_sets['dipoles_13L5_B2']\
                                                     + heat_loads_plot_sets['dipoles_33L5_B2'] +heat_loads_plot_sets['dipoles_13R4_B2']
 
+instrum_prefixes = 'QRLAB_31L2_QBS943_ QRLAA_13L5_QBS943_ QRLAA_33L5_QBS947_ QRLAA_13R4_QBS947_'.split()
+for pp in instrum_prefixes:
+    cell_name = pp.split('_')[1]
+    for nn in 'Q1 D2 D3 D4'.split():
+        vlist = []
+        for bb in ['B1', 'B2', '']:
+            vlist.append(pp+nn+bb+'.POSST')
+        heat_loads_plot_sets[cell_name+'_'+nn+bb] = vlist
+
+
 def groups_dict():
     #~ dict_hl_groups = {}
     #~ dict_hl_groups['InnerTriplets'] = variable_lists_heatloads['IT_IR1']+variable_lists_heatloads['IT_IR5']+\
@@ -216,7 +226,8 @@ magnet_length['special_HC_D4'] = [14.3]
 magnet_length['special_HC_dipoles'] = [14.3]
 magnet_length['special_total'] = [53.45]
 
-magnet_length['dipoles_31L2'] = [14.3]
+for kk in ['31L2', '13L5', '33L5', '13R4']:
+    magnet_length['dipoles_'+kk] = [14.3]
 
 
 def groups_length_dict(length='cryogenic_length'):
