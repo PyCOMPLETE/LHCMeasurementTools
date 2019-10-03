@@ -110,8 +110,6 @@ heat_loads_plot_sets['Q6s_IR28'] = variable_lists_heatloads['Q6s_IR2']+variable_
 heat_loads_plot_sets['special_HC_Q1']	= variable_lists_heatloads['special_HC_Q1']
 heat_loads_plot_sets['special_HC_dipoles'] = heat_loads_plot_sets['dipoles_31L2'] + heat_loads_plot_sets['dipoles_13L5'] + heat_loads_plot_sets['dipoles_33L5'] +heat_loads_plot_sets['dipoles_13R4']
 
-
-
 heat_loads_plot_sets['Q4D2s_IR15'] = variable_lists_heatloads['Q4D2s_IR1']+ variable_lists_heatloads['Q4D2s_IR5']
 heat_loads_plot_sets['Q4D2s_IR28'] = variable_lists_heatloads['Q4D2s_IR2']+ variable_lists_heatloads['Q4D2s_IR8']
 
@@ -119,7 +117,19 @@ heat_loads_plot_sets['Q6s_IR37'] = 'QRLEA_06L3_QBS947.POSST QRLEA_06L7_QBS947.PO
 
 heat_loads_plot_sets['D3s_IR4'] = ['QRLEB_05L4_QBS947.POSST', 'QRLEB_05R4_QBS947.POSST']
 
+heat_loads_plot_sets['dipoles_31L2_B1'] = 'QRLAB_31L2_QBS943_D2B1.POSST QRLAB_31L2_QBS943_D3B1.POSST QRLAB_31L2_QBS943_D4B1.POSST'.split()
+heat_loads_plot_sets['dipoles_13L5_B1'] = 'QRLAA_13L5_QBS943_D2B1.POSST QRLAA_13L5_QBS943_D3B1.POSST QRLAA_13L5_QBS943_D4B1.POSST'.split()
+heat_loads_plot_sets['dipoles_33L5_B1'] = 'QRLAA_33L5_QBS947_D2B1.POSST QRLAA_33L5_QBS947_D3B1.POSST QRLAA_33L5_QBS947_D4B1.POSST'.split()[:-1]
+heat_loads_plot_sets['dipoles_13R4_B1'] = 'QRLAA_13R4_QBS947_D2B1.POSST QRLAA_13R4_QBS947_D3B1.POSST QRLAA_13R4_QBS947_D4B1.POSST'.split()[:-1]
+heat_loads_plot_sets['special_HC_dipoles_B1'] = heat_loads_plot_sets['dipoles_31L2_B1'] + heat_loads_plot_sets['dipoles_13L5_B1']\
+                                                    + heat_loads_plot_sets['dipoles_33L5_B1'] +heat_loads_plot_sets['dipoles_13R4_B1']
 
+heat_loads_plot_sets['dipoles_31L2_B2'] = 'QRLAB_31L2_QBS943_D2B2.POSST QRLAB_31L2_QBS943_D3B2.POSST QRLAB_31L2_QBS943_D4B2.POSST'.split()
+heat_loads_plot_sets['dipoles_13L5_B2'] = 'QRLAA_13L5_QBS943_D2B2.POSST QRLAA_13L5_QBS943_D3B2.POSST QRLAA_13L5_QBS943_D4B2.POSST'.split()
+heat_loads_plot_sets['dipoles_33L5_B2'] = 'QRLAA_33L5_QBS947_D2B2.POSST QRLAA_33L5_QBS947_D3B2.POSST QRLAA_33L5_QBS947_D4B2.POSST'.split()[:-1]
+heat_loads_plot_sets['dipoles_13R4_B2'] = 'QRLAA_13R4_QBS947_D2B2.POSST QRLAA_13R4_QBS947_D3B2.POSST QRLAA_13R4_QBS947_D4B2.POSST'.split()[:-1]
+heat_loads_plot_sets['special_HC_dipoles_B2'] = heat_loads_plot_sets['dipoles_31L2_B2'] + heat_loads_plot_sets['dipoles_13L5_B2']\
+                                                    + heat_loads_plot_sets['dipoles_33L5_B2'] +heat_loads_plot_sets['dipoles_13R4_B2']
 
 def groups_dict():
     #~ dict_hl_groups = {}
@@ -1154,4 +1164,5 @@ arc_cells_by_sector = {
  'QRLAB_11L1_QBS943.POSST',
  'QRLBA_09L1_QBS947.POSST',
  'QRLBA_09L1_QBS943.POSST']}
+
 
