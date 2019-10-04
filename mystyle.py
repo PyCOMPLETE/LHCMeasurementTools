@@ -50,6 +50,12 @@ def colorprog(i_prog, Nplots, v1 = .9, v2 = 1., cm='hsv'):
         return [pl.cm.rainbow(k) for k in np.linspace(0, 1, Nplots)][i_prog]
     elif cm == 'listed':
         return ['darkslategrey', 'maroon', 'forestgreen', 'darkorange'][i_prog]
+    elif cm.startswith('custom'):
+        colors=cm.split('custom=')[-1].split(',')
+        return colors[i_prog]
+    elif cm.startswith('cm:'):
+        colors = getattr(pl.cm, cm.split('cm:')[-1])
+        return colors(i_prog)
     else:
         raise ValueError('What?!')
 
