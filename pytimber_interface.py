@@ -16,7 +16,7 @@ class data_period(object):
 
 def save_to_h5(filename, fill_dict):
     with h5py.File(filename, 'w')as h5_handle:
-        for varname, timber_variable_list in fill_dict.iteritems():
+        for varname, timber_variable_list in fill_dict.items():
             h5_handle.create_dataset(varname+'!t_stamps', data=timber_variable_list.t_stamps)
             h5_handle.create_dataset(varname+'!values', data=timber_variable_list.values)
 

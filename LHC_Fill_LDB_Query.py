@@ -1,6 +1,6 @@
 import pickle
 import os
-import lhc_log_db_query as lldb
+from . import lhc_log_db_query as lldb
 import numpy as np
 
 
@@ -21,12 +21,12 @@ def save_variables_and_pickle(varlist, file_path_prefix, save_pkl, fills_dict, f
         t_end_fill = fills_dict[filln]['t_endfill']
 
 
-        if filln in saved_fills.keys() and (saved_fills[filln] == 'complete' or
+        if filln in list(saved_fills.keys()) and (saved_fills[filln] == 'complete' or
                                             saved_fills[filln] == t_end_fill):
             continue
 
         fill_file = file_path_prefix + '_%d.csv'%filln
-        print '\nSaving fill %d in file %s\n'%(filln, fill_file)
+        print('\nSaving fill %d in file %s\n'%(filln, fill_file))
 
         lldb.dbquery(varlist, t_start_fill, t_end_fill, fill_file)
 
@@ -40,7 +40,7 @@ def save_variables_and_pickle(varlist, file_path_prefix, save_pkl, fills_dict, f
                 if save_to_pickle is True:
                     with open(save_pkl, 'wb') as fid:
                         pickle.dump(saved_fills, fid)
-                    print '\nSaved pickle!\n'
+                    print('\nSaved pickle!\n')
                 
     if save_to_pickle is True:
         with open(save_pkl, 'wb') as fid:

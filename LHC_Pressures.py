@@ -1,5 +1,5 @@
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 
 class Pressure(object):
     def __init__(self, timber_variable, press_gauge):

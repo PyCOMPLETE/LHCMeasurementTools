@@ -49,7 +49,7 @@ class timber_variable_list(object):
         try:
             return self.values[mask]
         except:
-            print(self.values.shape, self.t_stamps.shape)
+            print((self.values.shape, self.t_stamps.shape))
             raise
     def interp(self, t_stamps):
         return np.interp(t_stamps, self.t_stamps, self.values)
@@ -85,7 +85,7 @@ def parse_timber_file(timber_filename, verbose=True):
         if 'VARIABLE:' in line:
             vname = line.split(': ')[-1]
             if verbose:
-                print '\n\nStarting variable: ' + vname
+                print('\n\nStarting variable: ' + vname)
             variables[vname] = timber_variable_list()
         else:
             try:
@@ -98,16 +98,16 @@ def parse_timber_file(timber_filename, verbose=True):
             except ValueError:
                 if 'Timestamp (UTC_TIME)' in line:
                     time_input_UTC = True
-                    if verbose: print 'Set time to UTC'
+                    if verbose: print('Set time to UTC')
                 if verbose:
-                    print 'Skipped line: '+    line
+                    print('Skipped line: '+    line)
     return variables
 
 def timber_variables_from_h5(filename):
     import h5py
     dict_data = {}
     with h5py.File(filename, 'r') as fid:
-        for kk in fid.keys():
+        for kk in list(fid.keys()):
             varname = kk.split('!')[0]
             part = kk.split('!')[1]
             if varname not in dict_data:
@@ -145,7 +145,7 @@ def dbquery(varlist, t_start, t_stop, filename):
     outpfile = ' -N .//' + filename
 
     command = execut + config + variables + time_interval + outpfile
-    print command
+    print(command)
     os.system(command)
 
 class AlignedTimberData(object):
@@ -159,7 +159,7 @@ class AlignedTimberData(object):
                 var += '_2'
             dictionary[var] = data[:,ctr]
         if double:
-            print('Duplicate variables: %s' % double)
+            print(('Duplicate variables: %s' % double))
 
         self.timestamps = timestamps
         self.data = data

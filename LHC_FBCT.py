@@ -1,5 +1,5 @@
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 
 class FBCT:
     def __init__(self, timber_variable, beam=0, device='A', bct_for_norm=None):
@@ -32,7 +32,7 @@ class FBCT:
 
         t_stamps_unif = np.arange(np.min(t_stamps), np.max(t_stamps), t_inter)
         bint_unif = 0.*np.zeros((len(t_stamps_unif), nslots))
-        for ii in xrange(nslots):
+        for ii in range(nslots):
             bint_unif[:,ii] = np.interp(t_stamps_unif, t_stamps, bint[:,ii])
 
         return t_stamps_unif, bint_unif
@@ -79,6 +79,6 @@ def get_variable_dict(beam):
 def variable_list(beams = [1,2]):
     var_list = []
     for beam in beams:
-        var_list += get_variable_dict(beam).values()
+        var_list += list(get_variable_dict(beam).values())
 
     return var_list

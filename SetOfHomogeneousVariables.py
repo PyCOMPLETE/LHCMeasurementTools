@@ -1,5 +1,5 @@
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 
 class SetOfHomogeneousNumericVariables:
     def __init__(self, variable_list, timber_variables, skip_not_found=False):
@@ -13,8 +13,8 @@ class SetOfHomogeneousNumericVariables:
 
         self.timber_variables = {}
         for var_name in variable_list:
-            if skip_not_found and var_name not in dict_timber.keys():
-                print "Variable %s not found"%var_name
+            if skip_not_found and var_name not in list(dict_timber.keys()):
+                print("Variable %s not found"%var_name)
                 continue
             
             
@@ -51,14 +51,14 @@ class SetOfHomogeneousNumericVariables:
         t_min = np.inf
         t_max = -np.inf
         empty_vars = []
-        for key, var in self.timber_variables.iteritems():
+        for key, var in self.timber_variables.items():
             try:
                 t_min = min(t_min, var.t_stamps[0])
                 t_max = max(t_max, var.t_stamps[-1])
             except IndexError:
                 empty_vars.append(key)
         if empty_vars:
-            print('Warning: There are variables without data.', empty_vars)
+            print(('Warning: There are variables without data.', empty_vars))
         tt = np.arange(t_min, t_max, dt_seconds)
 
         # Data

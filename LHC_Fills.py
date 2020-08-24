@@ -1,6 +1,6 @@
 import numpy as np
-import TimberManager as tm
-import TimestampHelpers as th
+from . import TimberManager as tm
+from . import TimestampHelpers as th
 import pickle
 import time
 
@@ -11,8 +11,8 @@ class fillnumber:
             dict_timber_filln = tm.parse_timber_file(filename)
         else:
             dict_timber_filln = filename
-        self.t_stamps = np.array(map(float, dict_timber_filln['HX:FILLN'].t_stamps))
-        self.filln = np.array(map(lambda x: int(x[0]),dict_timber_filln['HX:FILLN'].values))
+        self.t_stamps = np.array(list(map(float, dict_timber_filln['HX:FILLN'].t_stamps)))
+        self.filln = np.array([int(x[0]) for x in dict_timber_filln['HX:FILLN'].values])
 
     def fill_start_end(self, filln_to_find, t_stop):
         i_found = np.where(self.filln==filln_to_find)[0][0]
@@ -31,7 +31,7 @@ def make_dict(csv_filename, t_stop):
     filln_obj = fillnumber(dict_fbm)
 
     list_b_modes = []
-    for kk in dict_fbm.keys():
+    for kk in list(dict_fbm.keys()):
         if 'HX:BMODE_' in kk:
             list_b_modes.append(kk.split(':BMODE_')[-1])
     
@@ -46,9 +46,9 @@ def make_dict(csv_filename, t_stop):
     fill_n_list = list(filln_obj.filln[filln_obj.filln > 0])
     dict_fill_bmodes = {}
 
-    for ii in xrange(len(fill_n_list) ):
+    for ii in range(len(fill_n_list) ):
       filln = fill_n_list[ii]
-      print 'filln = %d'%filln
+      print('filln = %d'%filln)
       dict_fill_bmodes[filln] = {}
 
       t_startfill, t_endfill, flag_complete = filln_obj.fill_start_end(filln, t_stop)
@@ -127,7 +127,7 @@ class Fills_Info(object):
     def fills_in_time_window(self, t_start, t_end):
         dict_fill_bmodes=self.dict_fill_bmodes
         fill_list = []
-        for filln in dict_fill_bmodes.keys():
+        for filln in list(dict_fill_bmodes.keys()):
             t_start_fill = dict_fill_bmodes[filln]['t_startfill']
             t_end_fill = dict_fill_bmodes[filln]['t_endfill']
             if not((t_end_fill < t_start) or (t_start_fill > t_end)):
@@ -138,7 +138,7 @@ class Fills_Info(object):
     def filln_at_time(self, t_unix):
         dict_fill_bmodes=self.dict_fill_bmodes
         found = False
-        for filln in dict_fill_bmodes.keys():
+        for filln in list(dict_fill_bmodes.keys()):
             t_start_fill = dict_fill_bmodes[filln]['t_startfill']
             t_end_fill = dict_fill_bmodes[filln]['t_endfill']
             if t_unix < t_end_fill and t_unix > t_start_fill:

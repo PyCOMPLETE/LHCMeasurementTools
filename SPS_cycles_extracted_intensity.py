@@ -1,4 +1,4 @@
-import TimestampHelpers as th
+from . import TimestampHelpers as th
 import numpy as np
 import pickle
 import os
@@ -28,12 +28,12 @@ def extract_cycle_fundamentals(machine_name, t_start_string, t_stop_string, cycl
     	if not to_be_downloaded:
     		continue
         
-        print var
+        print(var)
         try:
             dict_machine_fundamentals[var] = ldb.get(var, t_start_unix, t_stop_unix)[var]
         except Exception as err:
-            print 'Skipped!!!! Got:'
-            print err
+            print('Skipped!!!! Got:')
+            print(err)
     
     
     cycles = {}     
@@ -43,13 +43,13 @@ def extract_cycle_fundamentals(machine_name, t_start_string, t_stop_string, cycl
     cycles['destination_list'] = []
 
 
-    for var in dict_machine_fundamentals.keys():
+    for var in list(dict_machine_fundamentals.keys()):
         if len(var.split(':'))==3:
             if len(dict_machine_fundamentals[var])>0:
                 timing_user = str(var.split(':')[-1])
                 lsa_user = str(var.split(':')[-2])
                 t_stamp_list_this_cycle = list(dict_machine_fundamentals[var][0])
-                destination_list_this_cycle = map(lambda x : str(x.getDestination()), dict_machine_fundamentals[var][1])
+                destination_list_this_cycle = [str(x.getDestination()) for x in dict_machine_fundamentals[var][1]]
             
                 N_played = len(t_stamp_list_this_cycle)
             
@@ -64,7 +64,7 @@ def extract_cycle_fundamentals(machine_name, t_start_string, t_stop_string, cycl
     #print th.unixstamp2localtime(np.max(cycles['t_stamp_list']))
             
     ind_sorted = np.argsort(cycles['t_stamp_list'])
-    for kk in cycles.keys():
+    for kk in list(cycles.keys()):
         cycles[kk] = np.take(cycles[kk], ind_sorted)
     
     cycles['duration_list'] = list(np.diff(np.array(cycles['t_stamp_list'])))
@@ -72,7 +72,7 @@ def extract_cycle_fundamentals(machine_name, t_start_string, t_stop_string, cycl
     #remove the last for which I don't have the length
     N_played_all = len(cycles['duration_list'])
 
-    for kk in cycles.keys():
+    for kk in list(cycles.keys()):
         cycles[kk] = cycles[kk][:N_played_all-1]
 
     return cycles
@@ -80,18 +80,18 @@ def extract_cycle_fundamentals(machine_name, t_start_string, t_stop_string, cycl
 
 
 def filter_destinations(cycles, destinations_to_keep):
-    indices_keep = np.where(map(lambda dest: (dest in destinations_to_keep),  cycles['destination_list']))[0]
+    indices_keep = np.where([(dest in destinations_to_keep) for dest in cycles['destination_list']])[0]
     cycles_filtered = {}
-    for kk in cycles.keys():
+    for kk in list(cycles.keys()):
             cycles_filtered[kk] = np.take(cycles[kk], indices_keep)
     return cycles_filtered
 
 
 
 def filter_timing_user(cycles, timing_user_to_keep):
-    indices_keep = np.where(map(lambda user: (user in timing_user_to_keep),  cycles['timing_user_list']))[0]
+    indices_keep = np.where([(user in timing_user_to_keep) for user in cycles['timing_user_list']])[0]
     cycles_filtered = {}
-    for kk in cycles.keys():
+    for kk in list(cycles.keys()):
         cycles_filtered[kk] = np.take(cycles[kk], indices_keep)
     return cycles_filtered
 
@@ -101,7 +101,7 @@ def filter_times(cycles, time_start, time_end):
     start = np.searchsorted(cycles['t_stamp_list'], th.localtime2unixstamp(time_start))
     end = np.searchsorted(cycles['t_stamp_list'], th.localtime2unixstamp(time_end))
     cycles_filtered = {}
-    for kk in cycles.keys():
+    for kk in list(cycles.keys()):
         cycles_filtered[kk] = cycles[kk][start:end]
     return cycles_filtered
 
@@ -125,7 +125,7 @@ def add_intensity_to_PS_cycles(cycles_PS):
     N_cycles_PS = len(cycles_PS['t_stamp_list'])
 
     cycles_PS['intensity_before_extraction'] = N_cycles_PS*[None]
-    for ii in xrange(N_cycles_PS):
+    for ii in range(N_cycles_PS):
         pos_min = np.argmin(np.abs(np.array(t_stamps_inten)-cycles_PS['t_stamp_list'][ii]))
         cycles_PS['intensity_before_extraction'][ii] = inten[pos_min]
 
@@ -147,7 +147,7 @@ def add_extracted_intensity_to_SPS_cycles(cycles_SPS):
     N_cycles_SPS = len(cycles_SPS['t_stamp_list'])
 
     cycles_SPS['intensity_before_extraction'] = N_cycles_SPS*[None]
-    for ii in xrange(N_cycles_SPS):
+    for ii in range(N_cycles_SPS):
         pos_min = np.argmin(np.abs(np.array(t_stamps_inten)-cycles_SPS['t_stamp_list'][ii]))
         cycles_SPS['intensity_before_extraction'][ii] = inten[pos_min]
 
@@ -176,7 +176,7 @@ def add_dynamic_economy_to_SPS_cycles(cycles_SPS):
                 j = cycles_SPS['t_stamp_list'].tolist().index(ts)
                 cycles_SPS['dynamic_economy_count'][j] = economy_cnt[i]
             except ValueError:
-                print 'timestamp %f of economy counter does not match any SPS cycle' %ts
+                print('timestamp %f of economy counter does not match any SPS cycle' %ts)
 
 
 
@@ -191,7 +191,7 @@ def add_injections_into_the_SPS(cycles_PS, cycles_SPS):
     cycles_SPS['PS_cycles_timing_user'] = []
     cycles_SPS['PS_cycles_extracted_intensity'] = []
 
-    for ii in xrange(N_cycles_SPS):
+    for ii in range(N_cycles_SPS):
         t_start_present_SPS_cycle = cycles_SPS['t_stamp_list'][ii]
         t_end_present_SPS_cycle = cycles_SPS['t_stamp_list'][ii]+cycles_SPS['duration_list'][ii]
     
@@ -223,10 +223,10 @@ def make_pickle(date_string, outp_folder='cycle_info', filename_retrieved='cycle
     if complete_path in list_retrieved:
         return
 
-    print 'generating %s' %complete_path
+    print('generating %s' %complete_path)
 
     if not os.path.isdir(outp_folder):
-        print 'I create folder: '+ outp_folder
+        print('I create folder: '+ outp_folder)
         os.makedirs(outp_folder)
 
     t_start = date_string+' 00:00:00'
@@ -258,15 +258,15 @@ def load_pickles(file_list):
     
     cycles = defaultdict(list)
     for file in file_list_sorted:
-        print 'loading file: %s' %file
+        print('loading file: %s' %file)
         with open(file) as fid: 
             d = pickle.load(fid)
-        map(lambda key: cycles[key].extend(d[key]), d.keys())
+        list(map(lambda key: cycles[key].extend(d[key]), list(d.keys())))
 
     try:
-        assert len(set(len(cycles[key]) for key in cycles.keys())) <= 1
+        assert len(set(len(cycles[key]) for key in list(cycles.keys()))) <= 1
     except AssertionError:
-        print '\nERROR: the lists in the cycle dictionary have different length!\n'
+        print('\nERROR: the lists in the cycle dictionary have different length!\n')
     
     return cycles
 

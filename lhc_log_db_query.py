@@ -34,6 +34,6 @@ def dbquery(varlist, t_start, t_stop, filename):
 
     command = execut+config+variables+time_interval+outpfile
 
-    print command
+    print(command)
     
     os.system(command)
