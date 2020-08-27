@@ -32,7 +32,7 @@ class BCT(object):
             else:	
                 return self.values[ind_min]
 
-		
+        
 def get_variable_dict(beam):
     var_dict = {}
     var_dict['BEAM_INTENSITY'] = 'LHC.BCTDC.A6R4.B%d:BEAM_INTENSITY'%beam

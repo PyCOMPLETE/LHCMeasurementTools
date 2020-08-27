@@ -15,7 +15,7 @@ class filled_buckets:
         elif isinstance(timber_variable, tm.timber_variable_list):
             timber_variable_filled = timber_variable
         else:
-			raise ValueError('Type of timber variable is not understood')
+            raise ValueError('Type of timber variable is not understood')
             
             
                        

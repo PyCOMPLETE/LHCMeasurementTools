@@ -26,7 +26,7 @@ class energy:
         self.t_stamps = np.array(self.t_stamps)
         self.energy = np.array(self.energy)
         self.interp = interp1d(self.t_stamps, self.energy, bounds_error=False)
-		
+        
     def nearest_older_sample(self, t_obs):
         ind_min = np.argmin(np.abs(self.t_stamps - t_obs))
         if self.t_stamps[ind_min] > t_obs:
@@ -34,7 +34,7 @@ class energy:
         return self.energy[ind_min]
         
 
-	
+    
 
 def get_variable_dict(beam):
     var_dict = {}
@@ -44,6 +44,6 @@ def get_variable_dict(beam):
 def variable_list(beams = [1,2]):    
     var_list = []
     for beam in beams:
-		var_list += list(get_variable_dict(beam).values())
+        var_list += list(get_variable_dict(beam).values())
 
     return var_list

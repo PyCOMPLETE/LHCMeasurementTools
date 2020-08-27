@@ -68,7 +68,7 @@ class FBCT:
 
                 
 
-		
+        
 def get_variable_dict(beam):
     var_dict = {}
     var_dict['BUNCH_INTENSITY_A'] = 'LHC.BCTFR.A6R4.B%d:BUNCH_INTENSITY'%beam

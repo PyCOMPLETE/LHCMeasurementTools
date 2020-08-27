@@ -51,7 +51,7 @@ class LUMI:
             else:	
                 return self.lumi_tot[ind_min]
 
-		
+        
 def get_variable_dict():
     var_dict = {}
     var_dict['LUMI_TOT_ATLAS'] = 'ATLAS:LUMI_TOT_INST'

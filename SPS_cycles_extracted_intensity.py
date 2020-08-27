@@ -8,12 +8,12 @@ def extract_cycle_fundamentals(machine_name, t_start_string, t_stop_string, cycl
     import PyTimber
     
     if type(t_start_string) is str:
-    	t_start_unix = th.localtime2unixstamp(t_start_string)
-    	t_stop_unix = th.localtime2unixstamp(t_stop_string)
+        t_start_unix = th.localtime2unixstamp(t_start_string)
+        t_stop_unix = th.localtime2unixstamp(t_stop_string)
     else:
-    	t_start_unix = t_start_string
-    	t_stop_unix = t_stop_string
-    		
+        t_start_unix = t_start_string
+        t_stop_unix = t_stop_string
+            
 
     ldb=PyTimber.LoggingDB()
 
@@ -21,12 +21,12 @@ def extract_cycle_fundamentals(machine_name, t_start_string, t_stop_string, cycl
 
     dict_machine_fundamentals = {}
     for var in fundamentals_machine:
-    	to_be_downloaded = False
-    	for tempstr in cyclename_must_contain_one_of:
-    		if tempstr in var: to_be_downloaded = True 
-    	
-    	if not to_be_downloaded:
-    		continue
+        to_be_downloaded = False
+        for tempstr in cyclename_must_contain_one_of:
+            if tempstr in var: to_be_downloaded = True 
+        
+        if not to_be_downloaded:
+            continue
         
         print(var)
         try:

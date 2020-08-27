@@ -59,14 +59,14 @@ class Phase:
                 return 0.*self.power_loss[ind_min]
             else:	
                 return self.power_loss[ind_min]
-	
-	#~ @property #never tested, so I comment it out (Gianni)
-	#~ def total_power_loss(self):
-		#~ try:
-			#~ tot = np.sum(self.power_loss, axis=1)
-		#~ except NameError:
-			#~ raise NameError ('power_loss not there!\nPlease run "stick_power_loss"')
-		#~ return tot
+    
+    #~ @property #never tested, so I comment it out (Gianni)
+    #~ def total_power_loss(self):
+        #~ try:
+            #~ tot = np.sum(self.power_loss, axis=1)
+        #~ except NameError:
+            #~ raise NameError ('power_loss not there!\nPlease run "stick_power_loss"')
+        #~ return tot
 
 def parse_csv_file(filename):
 
@@ -188,8 +188,8 @@ class PowerLoss:
                 return 0.*self.power_loss[ind_min]
             else:	
                 return self.power_loss[ind_min]
-	
+    
     @property
     def total_power_loss(self):
-		return np.sum(self.power_loss, axis=1)
-		
+        return np.sum(self.power_loss, axis=1)
+        

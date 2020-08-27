@@ -17,15 +17,15 @@ def get_variable_dict(gauge_group):
 
     # MKI pressure gauges.
     var_dict['MKI'] = [
-		'VGPB.14.5R8.R.PR', 'VGPB.59.5R8.R.PR', 'VGPB.98.5R8.R.PR',
-		'VGPB.138.5R8.R.PR', 'VGPB.176.5R8.R.PR', 'MKI.A5L2.B1:PRESSURE',
-		'MKI.B5L2.B1:PRESSURE', 'MKI.C5L2.B1:PRESSURE', 'MKI.D5L2.B1:PRESSURE',
-		'VGPB.14.5L2.B.PR', 'VGPB.59.5L2.B.PR', 'VGPB.98.5L2.B.PR',
-		'VGPB.138.5L2.B.PR', 'VGPB.176.5L2.B.PR', 'MKI.A5R8.B2:PRESSURE',
-		'MKI.B5R8.B2:PRESSURE', 'MKI.C5R8.B2:PRESSURE', 'MKI.D5R8.B2:PRESSURE' ]
+        'VGPB.14.5R8.R.PR', 'VGPB.59.5R8.R.PR', 'VGPB.98.5R8.R.PR',
+        'VGPB.138.5R8.R.PR', 'VGPB.176.5R8.R.PR', 'MKI.A5L2.B1:PRESSURE',
+        'MKI.B5L2.B1:PRESSURE', 'MKI.C5L2.B1:PRESSURE', 'MKI.D5L2.B1:PRESSURE',
+        'VGPB.14.5L2.B.PR', 'VGPB.59.5L2.B.PR', 'VGPB.98.5L2.B.PR',
+        'VGPB.138.5L2.B.PR', 'VGPB.176.5L2.B.PR', 'MKI.A5R8.B2:PRESSURE',
+        'MKI.B5R8.B2:PRESSURE', 'MKI.C5R8.B2:PRESSURE', 'MKI.D5R8.B2:PRESSURE' ]
 
     return var_dict[gauge_group]
 
 def variable_list(gauge_group):
-	var_list = get_variable_dict(gauge_group)
-	return var_list
+    var_list = get_variable_dict(gauge_group)
+    return var_list

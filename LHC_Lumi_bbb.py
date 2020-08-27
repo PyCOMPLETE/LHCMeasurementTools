@@ -17,7 +17,7 @@ class LUMI:
         self.blumi = np.array(np.float_(self.blumi))
         self.t_stamps = np.array(np.float_(self.t_stamps))
         self.totlumi = np.sum(self.blumi, axis = 1)
-	self.meanlumi = np.average(self.blumi, axis = 1)
+    self.meanlumi = np.average(self.blumi, axis = 1)
 
 
     def uniform_time(self, t_inter=60.):
@@ -48,7 +48,7 @@ class LUMI:
             else:	
                 return self.blumi[ind_min]
 
-		
+        
 def get_variable_dict():
     var_dict = {}
     var_dict['BUNCH_LUMI_INST_ATLAS'] = 'ATLAS:BUNCH_LUMI_INST'
