@@ -11,6 +11,9 @@ def UnixTimeStamp2UTCTimberTimeString(t):
     return time.strftime('%Y-%m-%d %H:%M:%S.000', time.gmtime(t))
 
 class timber_data_line(object):
+    '''
+    Parses a single line of a Timber csv file.
+    '''
     def __init__(self, rline, time_input_UTC = False):
         list_values = rline.split(',')
         t_string = list_values[0]
@@ -22,7 +25,11 @@ class timber_data_line(object):
             self.ms = float(t_string.split('.')[-1])
         self.data_strings = list_values[1:]
 
-class timber_variable_list(object):
+
+class CalsVariable(object):
+    '''
+    Object containing a single CALS variable with multiple time stamps.
+    '''
     def __init__(self):
         self.t_stamps = []
         self.ms = []
@@ -55,15 +62,19 @@ class timber_variable_list(object):
         return np.interp(t_stamps, self.t_stamps, self.values)
 
 
+
+
 def make_timber_variable_list(t_stamps, values, ms=None):
-    if ms == None:
-        ms = np.zeros_like(t_stamps)
-    assert len(t_stamps) == len(values) == len(ms)
-    tvl = timber_variable_list()
-    tvl.ms = ms
-    tvl.t_stamps = t_stamps
-    tvl.values = values
-    return tvl
+
+    raise ValueError('Function suppressed, could be implemented as classmethod of timber_variable')
+    # if ms == None:
+    #     ms = np.zeros_like(t_stamps)
+    # assert len(t_stamps) == len(values) == len(ms)
+    # tvl = timber_variable_list()
+    # tvl.ms = ms
+    # tvl.t_stamps = t_stamps
+    # tvl.values = values
+    # return tvl
 
 def parse_timber_file(timber_filename, verbose=True):
 
@@ -86,7 +97,7 @@ def parse_timber_file(timber_filename, verbose=True):
             vname = line.split(': ')[-1]
             if verbose:
                 print('\n\nStarting variable: ' + vname)
-            variables[vname] = timber_variable_list()
+            variables[vname] = CalsVariable()
         else:
             try:
                 currline_obj = timber_data_line(line, time_input_UTC=time_input_UTC)
@@ -103,7 +114,7 @@ def parse_timber_file(timber_filename, verbose=True):
                     print('Skipped line: '+    line)
     return variables
 
-def timber_variables_from_h5(filename):
+def CalsVariables_from_h5(filename):
     import h5py
     dict_data = {}
     with h5py.File(filename, 'r') as fid:
@@ -111,11 +122,19 @@ def timber_variables_from_h5(filename):
             varname = kk.split('!')[0]
             part = kk.split('!')[1]
             if varname not in dict_data:
-                dict_data[str(varname)] = timber_variable_list()
+                dict_data[str(varname)] = CalsVariable()
             if part=='t_stamps':
                 dict_data[varname].t_stamps =  np.atleast_1d(fid[kk][:])
             elif part=='values':
                 dict_data[varname].values =  list(np.atleast_2d(fid[kk][:]))
+    return dict_data
+
+def CalsVariables_from_pytimber(pt_variables):
+    dict_data = {}
+    for varname in list(pt_variables.keys()):
+        dict_data[varname] = CalsVariable()
+        dict_data[varname].t_stamps = np.atleast_1d(pt_variables[varname][0])
+        dict_data[varname].values = list(map(np.atleast_1d, pt_variables[varname][1]))
     return dict_data
 
 def dbquery(varlist, t_start, t_stop, filename):
@@ -201,3 +220,9 @@ def parse_aligned_csv_file(filename, empty_value=np.nan):
     np_data = np.array(np_data)
     timestamps = np.array(timestamps)
     return AlignedTimberData(timestamps, np_data, variables)
+
+
+# For backward compatibility --> To be removed!
+timber_variable_list = CalsVariable
+timber_variables_from_h5 = CalsVariables_from_h5
+

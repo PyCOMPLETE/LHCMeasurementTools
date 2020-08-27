@@ -26,8 +26,15 @@ class fillnumber:
             flag_complete = True
         return t_start_fill, t_end_fill, flag_complete
 
-def make_dict(csv_filename, t_stop):
-    dict_fbm = tm.parse_timber_file(csv_filename)
+def make_dict(inpt, t_stop):
+    if hasattr(inpt, 'endswith'):
+        if inpt.endswith('.csv'):
+            dict_fbm = tm.parse_timber_file(inpt)
+        else:
+            dict_fbm = inpt
+    else:
+        dict_fbm = inpt
+
     filln_obj = fillnumber(dict_fbm)
 
     list_b_modes = []
@@ -73,6 +80,7 @@ def make_dict(csv_filename, t_stop):
           if len(ii_stop_bmode) > 0:
               dict_fill_bmodes[filln]['t_stop_'+bmode] = dict_t_start_stop_vects['t_stop_'
                                                                                        +bmode][ii_stop_bmode[-1]]
+
 
     return dict_fill_bmodes
 
