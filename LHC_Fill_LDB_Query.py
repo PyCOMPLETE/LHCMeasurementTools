@@ -3,8 +3,13 @@ import os
 from . import lhc_log_db_query as lldb
 import numpy as np
 
+import LHCMeasurementTools.TimberManager as tm
 
-def save_variables_and_pickle(varlist, file_path_prefix, save_pkl, fills_dict, fill_sublist=None,save_to_pickle=True, save_pickle_every = 0):
+
+def save_variables_and_pickle(varlist, file_path_prefix,
+        save_pkl, fills_dict, fill_sublist=None,
+        save_to_pickle=True, save_pickle_every = 0, db=None):
+
     if os.path.isfile(save_pkl):
         with open(save_pkl, 'rb') as fid:
             saved_fills = pickle.load(fid)
@@ -28,20 +33,29 @@ def save_variables_and_pickle(varlist, file_path_prefix, save_pkl, fills_dict, f
         fill_file = file_path_prefix + '_%d.csv'%filln
         print('\nSaving fill %d in file %s\n'%(filln, fill_file))
 
-        lldb.dbquery(varlist, t_start_fill, t_end_fill, fill_file)
+        #lldb.dbquery(varlist, t_start_fill, t_end_fill, fill_file)
+
+        if db is None:
+            import pytimber
+            db = pytimber.LoggingDB()
+
+        data = tm.CalsVariables_from_pytimber(
+                            db.get(varlist, t_start_fill, t_end_fill))
 
         if fills_dict[filln]['flag_complete'] is True:
             saved_fills[filln] = 'complete'
         else:
             saved_fills[filln] = t_end_fill
-            
+
         if save_pickle_every>0:
             if int(np.mod(i_fill, save_pickle_every))==0:
                 if save_to_pickle is True:
                     with open(save_pkl, 'wb') as fid:
                         pickle.dump(saved_fills, fid)
                     print('\nSaved pickle!\n')
-                
+
     if save_to_pickle is True:
         with open(save_pkl, 'wb') as fid:
                 pickle.dump(saved_fills, fid)
+
+    return data
