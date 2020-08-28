@@ -147,7 +147,8 @@ def CalsVariables_to_h5(data, filename, varlist=None):
         else:
             vals_for_h5 = np.array(np_vals)
 
-        dict_to_h5[varname+'!t_stamps'] = np.float_(data[varname].t_stamps)
+        dict_to_h5[varname+'!t_stamps'] = np.atleast_1d(
+                    np.float_(data[varname].t_stamps))
         dict_to_h5[varname+'!values'] = vals_for_h5
 
     with h5py.File(filename, 'w') as fid:
