@@ -129,8 +129,13 @@ def CalsVariables_to_h5(data, filename, varlist=None):
         np_vals = list(map(np.atleast_1d, values))
 
         lngts = list(map(len, np_vals))
-        minlen = np.min(lngts)
-        maxlen = np.max(lngts)
+        if len(lngts) > 0:
+            minlen = np.min(lngts)
+            maxlen = np.max(lngts)
+        else:
+            minlen = 0
+            maxlen = 0
+
 
         if minlen < maxlen:
             n_entries = len(data[varname].t_stamps)
