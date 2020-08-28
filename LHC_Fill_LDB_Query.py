@@ -35,12 +35,14 @@ def save_variables_and_pickle(varlist, file_path_prefix,
 
         #lldb.dbquery(varlist, t_start_fill, t_end_fill, fill_file)
 
+        print('Start downloading')
         if db is None:
             import pytimber
             db = pytimber.LoggingDB()
 
         data = tm.CalsVariables_from_pytimber(
                             db.get(varlist, t_start_fill, t_end_fill))
+        print('Done downloading')
 
         if fills_dict[filln]['flag_complete'] is True:
             saved_fills[filln] = 'complete'
