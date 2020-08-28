@@ -3,6 +3,8 @@ import numpy as np
 import calendar
 import os
 
+import h5py
+
 timb_timestamp2float= lambda time_string: time.mktime(time.strptime(time_string,'%Y-%m-%d %H:%M:%S'))
 timb_timestamp2float_ms= lambda time_string: time.mktime(time.strptime(time_string,'%Y-%m-%d %H:%M:%S.%f'))
 timb_timestamp2float_UTC= lambda time_string: calendar.timegm(time.strptime(time_string,'%Y-%m-%d %H:%M:%S'))
@@ -114,8 +116,40 @@ def parse_timber_file(timber_filename, verbose=True):
                     print('Skipped line: '+    line)
     return variables
 
+def CalsVariables_to_h5(data, filename, varlist=None):
+
+    if varlist is not None:
+        varnames = varlist
+    else:
+        varnames = data.keys()
+
+    dict_to_h5 = {}
+
+    for varname in varnames:
+        values = data[varname].values
+        np_vals = list(map(np.atleast_1d, values))
+
+        lngts = list(map(len, np_vals))
+        minlen = np.min(lngts)
+        maxlen = np.max(lngts)
+
+        if minlen < maxlen:
+            n_entries = len(data[varname].t_stamps)
+            vals_for_h5 = np.empty((n_entries, maxlen))
+            vals_for_h5[:,:] = np.nan
+            for ii in range(n_entries):
+                vals_for_h5[ii, :len(np_vals[ii])] = np_vals[ii]
+        else:
+            vals_for_h5 = np.array(np_vals)
+
+        dict_to_h5[varname+'!t_stamps'] = np.float_(data[varname].t_stamps)
+        dict_to_h5[varname+'!values'] = vals_for_h5
+
+    with h5py.File(filename, 'w') as fid:
+        for kk in list(dict_to_h5.keys()):
+            fid[kk] = dict_to_h5[kk]
+
 def CalsVariables_from_h5(filename):
-    import h5py
     dict_data = {}
     with h5py.File(filename, 'r') as fid:
         for kk in list(fid.keys()):
