@@ -30,19 +30,29 @@ def save_variables_and_pickle(varlist, file_path_prefix,
                                             saved_fills[filln] == t_end_fill):
             continue
 
-        fill_file = file_path_prefix + '_%d.csv'%filln
+        fill_file = file_path_prefix + '_%d.h5'%filln
         print('\nSaving fill %d in file %s\n'%(filln, fill_file))
 
-        #lldb.dbquery(varlist, t_start_fill, t_end_fill, fill_file)
+        # Discontinued (save csv using java executable)
+        # lldb.dbquery(varlist, t_start_fill, t_end_fill, fill_file)
 
-        print('Start downloading')
+        print('Start downloading...')
         if db is None:
             import pytimber
             db = pytimber.LoggingDB()
+        data = {}
+        for ii, vv in enumerate(varlist):
+            print(f'{ii+1}/{len(varlist)} = {vv}')
+            data.update(tm.CalsVariables_from_pytimber(
+                            db.get([vv], t_start_fill, t_end_fill)))
 
-        data = tm.CalsVariables_from_pytimber(
-                            db.get(varlist, t_start_fill, t_end_fill))
+        #data = tm.CalsVariables_from_pytimber(
+        #                    db.get(varlist, t_start_fill, t_end_fill))
         print('Done downloading')
+
+        print('Saving h5...')
+        tm.CalsVariables_to_h5(data, fill_file)
+        print('Done')
 
         if fills_dict[filln]['flag_complete'] is True:
             saved_fills[filln] = 'complete'

@@ -27,7 +27,6 @@ class timber_data_line(object):
             self.ms = float(t_string.split('.')[-1])
         self.data_strings = list_values[1:]
 
-
 class CalsVariable(object):
     '''
     Object containing a single CALS variable with multiple time stamps.
@@ -135,10 +134,11 @@ def CalsVariables_to_h5(data, filename, varlist=None):
 
         if minlen < maxlen:
             n_entries = len(data[varname].t_stamps)
-            vals_for_h5 = np.empty((n_entries, maxlen))
+            vals_for_h5 = np.zeros((n_entries, maxlen))
             vals_for_h5[:,:] = np.nan
             for ii in range(n_entries):
                 vals_for_h5[ii, :len(np_vals[ii])] = np_vals[ii]
+            #vals_for_h5 = np.concatenate(np_vals)
         else:
             vals_for_h5 = np.array(np_vals)
 
@@ -147,7 +147,11 @@ def CalsVariables_to_h5(data, filename, varlist=None):
 
     with h5py.File(filename, 'w') as fid:
         for kk in list(dict_to_h5.keys()):
-            fid[kk] = dict_to_h5[kk]
+            #fid[kk] = dict_to_h5[kk]
+            fid.create_dataset(kk, data=dict_to_h5[kk],
+                    compression='lzf')
+                    # 'lzf' filter used to have good speed
+                    # https://docs.h5py.org/en/stable/high/dataset.html#lossless-compression-filters
 
 def CalsVariables_from_h5(filename):
     dict_data = {}
