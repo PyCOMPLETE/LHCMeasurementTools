@@ -159,7 +159,7 @@ def CalsVariables_to_h5(data, filename, varlist=None):
                     # 'lzf' filter used to have good speed
                     # https://docs.h5py.org/en/stable/high/dataset.html#lossless-compression-filters
 
-def CalsVariables_from_h5(filename):
+def CalsVariables_from_h5(filename, remove_nans=True):
     dict_data = {}
     with h5py.File(filename, 'r') as fid:
         for kk in list(fid.keys()):
@@ -171,6 +171,14 @@ def CalsVariables_from_h5(filename):
                 dict_data[varname].t_stamps =  np.atleast_1d(fid[kk][:])
             elif part=='values':
                 dict_data[varname].values =  list(np.atleast_2d(fid[kk][:]))
+
+    if remove_nans:
+        for kk in dict_data.keys():
+            for ii, vv in enumerate(dict_data[kk].values):
+                mask = ~np.isnan(vv)
+                if np.any(mask):
+                    dict_data[kk].values[ii] = vv[mask]
+
     return dict_data
 
 def CalsVariables_from_pytimber(pt_variables):
