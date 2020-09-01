@@ -40,6 +40,12 @@ def save_variables_and_pickle(varlist, file_path_prefix,
         if db is None:
             import pytimber
             db = pytimber.LoggingDB()
+
+        try:
+            print(f'pytimber source" {db._source}')
+        except Exception:
+            pass
+
         data = {}
         for ii, vv in enumerate(varlist):
             print(f'{ii+1}/{len(varlist)} = {vv}')
@@ -70,4 +76,3 @@ def save_variables_and_pickle(varlist, file_path_prefix,
         with open(save_pkl, 'wb') as fid:
                 pickle.dump(saved_fills, fid)
 
-    return data

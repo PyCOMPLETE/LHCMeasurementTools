@@ -41,7 +41,7 @@ def make_dict(inpt, t_stop):
     for kk in list(dict_fbm.keys()):
         if 'HX:BMODE_' in kk:
             list_b_modes.append(kk.split(':BMODE_')[-1])
-    
+
     dict_t_start_stop_vects = {}
     for bmode in list_b_modes:
       flag_bmode = np.squeeze(np.float_(np.array(dict_fbm['HX:BMODE_'+bmode].values)))
@@ -50,7 +50,7 @@ def make_dict(inpt, t_stop):
       dict_t_start_stop_vects['t_start_'+bmode] = t_diff_flag_bmode[diff_flag_bmode == 1.]
       dict_t_start_stop_vects['t_stop_'+bmode] = t_diff_flag_bmode[diff_flag_bmode == -1.]
 
-    fill_n_list = list(filln_obj.filln[filln_obj.filln > 0])
+    fill_n_list = list(map(int, list(filln_obj.filln[filln_obj.filln > 0])))
     dict_fill_bmodes = {}
 
     for ii in range(len(fill_n_list) ):
@@ -66,7 +66,7 @@ def make_dict(inpt, t_stop):
       for bmode in list_b_modes:
           dict_fill_bmodes[filln]['t_start_'+bmode] = -1.
           dict_fill_bmodes[filln]['t_stop_'+bmode] = -1.
-          ii_start_bmode = np.where(np.logical_and(dict_t_start_stop_vects['t_start_'+bmode] > t_startfill, 
+          ii_start_bmode = np.where(np.logical_and(dict_t_start_stop_vects['t_start_'+bmode] > t_startfill,
                                                    dict_t_start_stop_vects['t_start_'+bmode] < t_endfill))[0]
           if len(ii_start_bmode) > 0:
               dict_fill_bmodes[filln]['t_start_'+bmode] = dict_t_start_stop_vects['t_start_'
