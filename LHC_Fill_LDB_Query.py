@@ -1,18 +1,22 @@
-import pickle
+import json
 import os
-from . import lhc_log_db_query as lldb
+# from . import lhc_log_db_query as lldb
 import numpy as np
 
 import LHCMeasurementTools.TimberManager as tm
 
+def load_fill_dict_from_json(fname):
+    with open(fname, 'r') as fid:
+        ddd = json.load(fid)
+        fill_dict = {int(kk): ddd[kk] for kk in ddd.keys()}
+    return fill_dict
 
-def save_variables_and_pickle(varlist, file_path_prefix,
-        save_pkl, fills_dict, fill_sublist=None,
-        save_to_pickle=True, save_pickle_every = 0, db=None):
+def save_variables_and_json(varlist, file_path_prefix,
+        save_json, fills_dict, fill_sublist=None,
+        save_to_json=True, save_json_every = 0, db=None):
 
-    if os.path.isfile(save_pkl):
-        with open(save_pkl, 'rb') as fid:
-            saved_fills = pickle.load(fid)
+    if os.path.isfile(save_json):
+        saved_fills =  load_fill_dict_from_json(save_json)
     else:
         saved_fills = {}
 
@@ -65,14 +69,15 @@ def save_variables_and_pickle(varlist, file_path_prefix,
         else:
             saved_fills[filln] = t_end_fill
 
-        if save_pickle_every>0:
-            if int(np.mod(i_fill, save_pickle_every))==0:
-                if save_to_pickle is True:
-                    with open(save_pkl, 'wb') as fid:
-                        pickle.dump(saved_fills, fid)
-                    print('\nSaved pickle!\n')
+        if save_json_every>0:
+            if int(np.mod(i_fill, save_json_every))==0:
+                if save_to_json is True:
+                    with open(save_json, 'w') as fid:
+                        json.dump(saved_fills, fid)
+                    print('\nSaved json!\n')
 
-    if save_to_pickle is True:
-        with open(save_pkl, 'wb') as fid:
-                pickle.dump(saved_fills, fid)
+
+    if save_to_json is True:
+        with open(save_json, 'w') as fid:
+                json.dump(saved_fills, fid)
 
