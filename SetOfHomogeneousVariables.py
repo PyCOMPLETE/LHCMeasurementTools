@@ -16,8 +16,6 @@ class SetOfHomogeneousNumericVariables:
             if skip_not_found and var_name not in list(dict_timber.keys()):
                 print("Variable %s not found"%var_name)
                 continue
-            
-            
             self.timber_variables[var_name] = dict_timber[var_name]
             self.timber_variables[var_name].t_stamps = np.array(self.timber_variables[var_name].t_stamps,dtype=float)
 

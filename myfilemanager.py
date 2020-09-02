@@ -100,5 +100,5 @@ def aligned_obj_to_h5(obj, h5):
     import h5py
     with h5py.File(h5, 'w') as h5_handle:
         h5_handle.create_dataset('timestamps', data=obj.timestamps)
-        h5_handle.create_dataset('variables', data=obj.variables)
+        h5_handle.create_dataset('variables', data=np.string_(obj.variables))
         h5_handle.create_dataset('data', data=obj.data)
