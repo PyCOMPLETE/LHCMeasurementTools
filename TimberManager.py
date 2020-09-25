@@ -278,3 +278,56 @@ def parse_aligned_csv_file(filename, empty_value=np.nan):
 timber_variable_list = CalsVariable
 timber_variables_from_h5 = CalsVariables_from_h5
 
+try:
+
+    from pytimber.nxcals import NXCals
+
+    # STILL TO BE COMPLETED, DOES NOT WORK WITH UNIX TIMESTAMPS
+    class NXCalsFastQuery(NXCals):
+        '''
+        This class can replace pytimber to have fast extraction of many
+        scalar variables.
+        '''
+        def __init__(self, *args, **kwargs):
+            if 'system' in kwargs.keys():
+                self.system = kwargs['system']
+                kwargs.pop('system')
+            super().__init__(*args, **kwargs)
+
+        def get(self, variables, t1, t2, system=None):
+            '''
+                system should be either 'CMW' or 'WINCCOA'
+            '''
+
+            if system is None:
+                system = self.system
+
+            assert(system is not None)
+
+            query = self.DataQuery.byVariables()\
+                .system(system)\
+                .startTime(t1)\
+                .endTime(t2)
+
+            for vv in variables:
+                query = query.variable(vv)
+
+            dfp = query.build()\
+                    .sort("nxcals_variable_name","nxcals_timestamp")\
+                    .na().drop()\
+                    .select("nxcals_timestamp",
+                            "nxcals_value", "nxcals_variable_name")
+
+            data1=np.fromiter(
+                    (tuple(dd.values()) for dd in dfp.collect()),
+                    dtype=[('ts',int),('val',float),('var','U32')] )
+
+            out={}
+            for var in set(data1['var']):
+              sel=data1['var']==var
+              out[var]=(data1['ts'][sel]/1e9,data1['val'][sel])
+
+            return out
+
+except Exception:
+    print('NXCALS not possible!!!')
