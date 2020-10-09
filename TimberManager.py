@@ -335,6 +335,13 @@ try:
               sel=data1['var']==var
               out[var]=(data1['ts'][sel]/1e9,data1['val'][sel])
 
+            for vv in variables:
+                if vv not in out.keys():
+                    print(f'{vv} not found!')
+                    out[vv] = (
+                            np.array([], dtype=np.float64),
+                            np.array([], dtype=np.float64))
+
             return out
 
 except Exception:
