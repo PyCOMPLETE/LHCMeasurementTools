@@ -2,6 +2,7 @@ import time
 import numpy as np
 import calendar
 import os
+import six
 
 import h5py
 
@@ -294,6 +295,13 @@ try:
                 kwargs.pop('system')
             super().__init__(*args, **kwargs)
 
+        def toTimestring(self, t):
+            if isinstance(t, six.string_types):
+               return t
+            else: #We assume linux timestamp
+               return time.strftime("%Y-%m-%d %H:%M:%S",
+                                            time.gmtime(t))+'.000'
+
         def get(self, variables, t1, t2, system=None):
             '''
                 system should be either 'CMW' or 'WINCCOA'
@@ -306,8 +314,8 @@ try:
 
             query = self.DataQuery.byVariables()\
                 .system(system)\
-                .startTime(t1)\
-                .endTime(t2)
+                .startTime(self.toTimestring(t1))\
+                .endTime(self.toTimestring(t2))
 
             for vv in variables:
                 query = query.variable(vv)
