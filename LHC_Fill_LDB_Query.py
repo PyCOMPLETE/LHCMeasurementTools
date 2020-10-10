@@ -13,7 +13,8 @@ def load_fill_dict_from_json(fname):
 
 def save_variables_and_json(varlist, file_path_prefix,
         save_json, fills_dict, fill_sublist=None,
-        save_to_json=True, save_json_every = 0, db=None):
+        save_to_json=True, save_json_every = 0, db=None,
+        n_vars_per_extraction=1):
 
     if os.path.isfile(save_json):
         saved_fills =  load_fill_dict_from_json(save_json)
@@ -46,18 +47,16 @@ def save_variables_and_json(varlist, file_path_prefix,
             db = pytimber.LoggingDB()
 
         try:
-            print(f'pytimber source" {db._source}')
+            print(f'pytimber source: {db._source}')
         except Exception:
             pass
 
         data = {}
-        for ii, vv in enumerate(varlist):
-            print(f'{ii+1}/{len(varlist)} = {vv}')
+        for ii in range(0, len(varlist), n_vars_per_extraction):
+            thesevars = varlist[ii: ii + n_vars_per_extraction]
+            print(f'{ii}/{len(varlist)}: {thesevars[0]} ... {thesevars[-1]}', end='\r', flush=True)
             data.update(tm.CalsVariables_from_pytimber(
-                            db.get([vv], t_start_fill, t_end_fill)))
-
-        #data = tm.CalsVariables_from_pytimber(
-        #                    db.get(varlist, t_start_fill, t_end_fill))
+                db.get(thesevars, t_start_fill, t_end_fill)))
         print('Done downloading')
 
         print('Saving h5...')
