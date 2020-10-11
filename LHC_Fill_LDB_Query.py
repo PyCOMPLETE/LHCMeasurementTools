@@ -54,10 +54,13 @@ def save_variables_and_json(varlist, file_path_prefix,
         data = {}
         for ii in range(0, len(varlist), n_vars_per_extraction):
             thesevars = varlist[ii: ii + n_vars_per_extraction]
-            print(f'{ii}/{len(varlist)}: {thesevars[0]} ... {thesevars[-1]}', end='\r', flush=True)
+            print(
+                f'{ii}/{len(varlist)}: {thesevars[0]} ... {thesevars[-1]}',
+                #end='\r', flush=True
+                )
             data.update(tm.CalsVariables_from_pytimber(
                 db.get(thesevars, t_start_fill, t_end_fill)))
-        print('Done downloading')
+        print('\n\nDone downloading')
 
         print('Saving h5...')
         tm.CalsVariables_to_h5(data, fill_file)
