@@ -32,10 +32,10 @@ class CalsVariable(object):
     '''
     Object containing a single CALS variable with multiple time stamps.
     '''
-    def __init__(self):
-        self.t_stamps = []
-        self.ms = []
-        self.values = []
+    def __init__(self, t_stamps=[], values=[], ms=[]):
+        self.t_stamps = t_stamps
+        self.ms = ms
+        self.values = values
 
     def float_values(self):
         return np.squeeze(np.float_(self.values))
@@ -68,7 +68,7 @@ class CalsVariable(object):
 
 def make_timber_variable_list(t_stamps, values, ms=None):
 
-    raise ValueError('Function suppressed, could be implemented as classmethod of timber_variable')
+    raise ValueError('Function suppressed, you can simply use CalsVariable')
     # if ms == None:
     #     ms = np.zeros_like(t_stamps)
     # assert len(t_stamps) == len(values) == len(ms)
