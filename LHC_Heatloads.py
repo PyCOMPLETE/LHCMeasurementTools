@@ -1,5 +1,5 @@
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 
 class Heatload:
     def __init__(self, timber_variable, sector):
@@ -28,7 +28,7 @@ def get_variable_dict(sector):
 def variable_list(sectors=[12,23,34,45,56,67,78,81]):
     var_list = []
     for sector in sectors:
-        var_list += get_variable_dict(sector).values()
+        var_list += list(get_variable_dict(sector).values())
 
     return var_list
 
@@ -310,14 +310,14 @@ def sector_all_variables(sectors):
 
 def get_dict_magnet_lengths():
     dict_lengths = {}
-    for kk in variable_lists_heatloads.keys():
+    for kk in list(variable_lists_heatloads.keys()):
         for device in variable_lists_heatloads[kk]:
             dict_lengths[device] = magnet_length[kk][0]
     return dict_lengths
 
 def get_dict_cryostat_lengths():
     dict_lengths = {}
-    for kk in variable_lists_heatloads.keys():
+    for kk in list(variable_lists_heatloads.keys()):
         for device in variable_lists_heatloads[kk]:
             dict_lengths[device] = cryogenic_length[kk][0]
     return dict_lengths

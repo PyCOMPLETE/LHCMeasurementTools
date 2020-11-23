@@ -1,5 +1,5 @@
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 
 class filled_buckets:
     def __init__(self, timber_variable, beam=0, verbose=False):
@@ -15,17 +15,17 @@ class filled_buckets:
         elif isinstance(timber_variable, tm.timber_variable_list):
             timber_variable_filled = timber_variable
         else:
-			raise ValueError('Type of timber variable is not understood')
+            raise ValueError('Type of timber variable is not understood')
             
             
                        
         self.t_stamps = np.array(timber_variable_filled.t_stamps)
         self.fillbuck = timber_variable_filled.values
-        self.fillbuck = map(lambda x: np.array(map(lambda y: int(float(y)), x)), self.fillbuck)
-        self.fillbuck = map(lambda x: (x-1)/10, self.fillbuck)
-        self.fillbuck = map(lambda x: x[x>=0], self.fillbuck)
+        self.fillbuck = [np.array([int(float(y)) for y in x]) for x in self.fillbuck]
+        self.fillbuck = [(x-1)/10 for x in self.fillbuck]
+        self.fillbuck = [x[x>=0] for x in self.fillbuck]
 
-        self.Nbun = map(len, self.fillbuck)
+        self.Nbun = list(map(len, self.fillbuck))
         N_acq = len(self.Nbun)
 
         # self.flag_filled = []
@@ -33,13 +33,13 @@ class filled_buckets:
         #     self.flag_filled.append(np.array(map(lambda x: x in self.fillbuck[ii], range(3564))))
         N_slots = 3564
         self.flag_filled = np.array(N_acq * [N_slots * [False]])
-        array_slots = np.array(range(N_slots))
+        array_slots = np.array(list(range(N_slots)))
         if verbose:
-            print 'Start building fillbucket matrix'
-        for ii in xrange(N_acq):
-           self.flag_filled[ii,:] = map(lambda x: x in self.fillbuck[ii],array_slots) 
+            print('Start building fillbucket matrix')
+        for ii in range(N_acq):
+           self.flag_filled[ii,:] = [x in self.fillbuck[ii] for x in array_slots] 
         if verbose:
-            print 'Done'
+            print('Done')
 
 
     def nearest_older_sample(self, t_obs):
@@ -98,18 +98,18 @@ class blength:
         self.t_stamps = timber_variable_blength.t_stamps
         self.blen = []
         blen_timberstyle = timber_variable_blength.values
-        blen_timberstyle = map(lambda x: np.array(map(float, x)), blen_timberstyle)
+        blen_timberstyle = [np.array(list(map(float, x))) for x in blen_timberstyle]
 
         N_acq = len(self.t_stamps)
 
-        for ii in xrange(N_acq):
+        for ii in range(N_acq):
             blen_vect = np.zeros(3564)
             flag_filled_curr, Nbun_curr = fillbuck_obj.nearest_older_sample_flag_filled_Nbun(self.t_stamps[ii])
             blen_vect[flag_filled_curr] = (blen_timberstyle[ii][:Nbun_curr])
             self.blen.append(blen_vect)
 
         self.t_stamps = np.array(self.t_stamps)
-        self.avblen = np.array(map(mean_nonzero, self.blen))
+        self.avblen = np.array(list(map(mean_nonzero, self.blen)))
         self.blen = np.array(self.blen)
 
     def nearest_older_sample(self, t_obs, flag_return_time=False):
@@ -148,6 +148,6 @@ def get_variable_dict(beam):
 def variable_list(beams = [1,2]):
     var_list = []
     for beam in beams:
-                var_list += get_variable_dict(beam).values()
+                var_list += list(get_variable_dict(beam).values())
 
     return var_list

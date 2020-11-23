@@ -1,5 +1,5 @@
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 from scipy.interpolate import interp1d
 
 class BCT(object):
@@ -32,7 +32,7 @@ class BCT(object):
             else:	
                 return self.values[ind_min]
 
-		
+        
 def get_variable_dict(beam):
     var_dict = {}
     var_dict['BEAM_INTENSITY'] = 'LHC.BCTDC.A6R4.B%d:BEAM_INTENSITY'%beam
@@ -42,6 +42,6 @@ def get_variable_dict(beam):
 def variable_list(beams = [1,2]):
     var_list = []
     for beam in beams:
-        var_list += get_variable_dict(beam).values()
+        var_list += list(get_variable_dict(beam).values())
 
     return var_list

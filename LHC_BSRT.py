@@ -1,5 +1,5 @@
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 
 na = np.array
 
@@ -43,10 +43,10 @@ class BSRT:
         self.sigma_h = []
         self.sigma_v = []
 
-        for ii in xrange(len(bunches_effectively_recorded.t_stamps)):
+        for ii in range(len(bunches_effectively_recorded.t_stamps)):
             if np.mod(ii,10000) == 0:
-                print 'expanding %.1f' % (
-                    float(ii)/len(bunches_effectively_recorded.t_stamps)*100) + """%"""
+                print('expanding %.1f' % (
+                    float(ii)/len(bunches_effectively_recorded.t_stamps)*100) + """%""")
 
             N_meas = len(bunches_effectively_recorded.values[ii])
 
@@ -55,7 +55,7 @@ class BSRT:
                 n_aver = 0
                 sigma_h_sum = 0.
                 sigma_v_sum = 0.
-                for jj in xrange(N_meas):
+                for jj in range(N_meas):
                     sigma_h_sum+= float(sigma_h.values[ii][jj])
                     sigma_v_sum+= float(sigma_v.values[ii][jj])
                     n_aver+=1
@@ -76,7 +76,7 @@ class BSRT:
                         sigma_h_sum = 0.
                         sigma_v_sum = 0.
             else:
-                for jj in xrange(N_meas):
+                for jj in range(N_meas):
                     self.bunch_n.append(np.float_(bunches_effectively_recorded.values[ii][jj]))
                     self.sigma_h.append(np.float_(sigma_h.values[ii][jj]))
                     self.sigma_v.append(np.float_(sigma_v.values[ii][jj]))
@@ -144,7 +144,7 @@ class BSRT:
         betaf_v = 0.*self.sigma_v+1.
         gamma = 0.*self.sigma_h
 
-        energy = np.array(map(lambda x: energy_ob.nearest_older_sample(x), self.t_stamps))
+        energy = np.array([energy_ob.nearest_older_sample(x) for x in self.t_stamps])
 
         mask_450 = np.logical_and(energy > 400., energy < 500.)
         sigma_corr_h[mask_450] = e_dict['sigma_corr_h'][450.][self.beam]
@@ -197,9 +197,9 @@ class BSRT:
     def get_bunches_effectively_recorded(self, gate_timber, sigma_timber):
         recorded_bunches = tm.timber_variable_list()
         i1 = 0
-        for i2 in xrange(len(gate_timber.t_stamps)):
+        for i2 in range(len(gate_timber.t_stamps)):
             if np.mod(i2,10000) == 0:
-                print 'Cleaning %.1f'%(float(i2)/len(gate_timber.t_stamps)*100)+"""%"""
+                print('Cleaning %.1f'%(float(i2)/len(gate_timber.t_stamps)*100)+"""%""")
             if gate_timber.t_stamps[i2] == sigma_timber.t_stamps[i1]:
                 recorded_bunches.t_stamps.append(gate_timber.t_stamps[i2])
                 recorded_bunches.values.append(gate_timber.values[i2])
@@ -218,7 +218,7 @@ class BSRT:
 
         for i_line, i_bunch in enumerate(bunch_n_un):
                 if np.mod(i_line,10)==0:
-                    print 're-shuffle %.1f'%(float(i_line)/len(bunch_n_un)*100)+"""%"""
+                    print('re-shuffle %.1f'%(float(i_line)/len(bunch_n_un)*100)+"""%""")
                 inds=np.nonzero(self.bunch_n==i_bunch)
                 x=self.norm_emit_h[inds]
                 y=self.norm_emit_v[inds]
@@ -285,6 +285,6 @@ def get_variable_dict(beam):
 def variable_list(beams = [1,2]):
     var_list = []
     for beam in beams:
-                var_list += get_variable_dict(beam).values()
+                var_list += list(get_variable_dict(beam).values())
 
     return var_list

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 
 class LUMI:
     def __init__(self, timber_variable, experiment='ATLAS'):
@@ -30,7 +30,7 @@ class LUMI:
 
         t_stamps_unif = np.arange(np.min(t_stamps), np.max(t_stamps), t_inter)
         lumi_tot_unif = 0.*np.zeros((len(t_stamps_unif), nslots))
-        for ii in xrange(nslots):
+        for ii in range(nslots):
             lumi_tot_unif[:,ii] = np.interp(t_stamps_unif, t_stamps, lumi_tot[:,ii])
 
         return t_stamps_unif, lumi_tot_unif
@@ -51,7 +51,7 @@ class LUMI:
             else:	
                 return self.lumi_tot[ind_min]
 
-		
+        
 def get_variable_dict():
     var_dict = {}
     var_dict['LUMI_TOT_ATLAS'] = 'ATLAS:LUMI_TOT_INST'
@@ -62,6 +62,6 @@ def get_variable_dict():
 def variable_list():
     var_list = []
     
-    var_list = get_variable_dict().values()
+    var_list = list(get_variable_dict().values())
 
     return var_list

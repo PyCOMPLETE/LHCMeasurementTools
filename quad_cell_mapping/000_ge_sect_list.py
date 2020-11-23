@@ -37,7 +37,7 @@ for ref_str in ref_strings:
     cell_ref = int(ref_str.split(':')[-1].split(side)[0].split('_')[-1])
 
     with open('cell_naming_%s.txt'%side, 'w') as fid:
-        for ii in xrange(-(Qref-8), (34-Qref)+1, 2):
+        for ii in range(-(Qref-8), (34-Qref)+1, 2):
             if side[0]=='L':
                 if check_limits(Qref+ii-1): fid.write('Q%d%s\t%d%s_CV943\n'%(Qref+ii-1, side, cell_ref+ii, side))
             if check_limits(Qref+ii): fid.write('Q%d%s\t%d%s_CV947\n'%(Qref+ii, side, cell_ref+ii, side))

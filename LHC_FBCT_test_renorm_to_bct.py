@@ -1,5 +1,5 @@
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 
 class FBCT:
     def __init__(self, timber_variable, beam=0, device='A', bct_for_norm=None):
@@ -14,33 +14,33 @@ class FBCT:
 
         self.t_stamps = timber_variable_FBCT.t_stamps
         self.bint = timber_variable_FBCT.values	
-	     
+         
         # self.bint = map(lambda x: np.array(map(float, x)), self.bint)
         # self.bint = np.array(self.bint)
         # self.t_stamps = np.array(self.t_stamps)
         # self.totint = np.array(map(sum, self.bint))
 
-	self.bint = np.array(np.float_(self.bint))
-	self.t_stamps = np.array(np.float_(self.t_stamps))
-	self.totint = np.sum(self.bint, axis = 1)
-	
-	
-	if bct_for_norm:
-	    bct_int_interp = np.array(np.interp(self.t_stamps, bct_for_norm.t_stamps, bct_for_norm.values)) 	
-   	    fbct_int = self.totint
+    self.bint = np.array(np.float_(self.bint))
+    self.t_stamps = np.array(np.float_(self.t_stamps))
+    self.totint = np.sum(self.bint, axis = 1)
+    
+    
+    if bct_for_norm:
+        bct_int_interp = np.array(np.interp(self.t_stamps, bct_for_norm.t_stamps, bct_for_norm.values)) 	
+        fbct_int = self.totint
             cor_fact=(fbct_int/bct_int_interp)
 
-	    fbct_bint_ren = []
-	    t_stamps_ren = []
-	    for ii in range(self.bint.shape[0]):
-		if cor_fact[ii] != 0:	    	
-		    fbct_bint_ren.append(self.bint[ii,:]/cor_fact[ii])
-		    t_stamps_ren.append(self.t_stamps[ii])
+        fbct_bint_ren = []
+        t_stamps_ren = []
+        for ii in range(self.bint.shape[0]):
+        if cor_fact[ii] != 0:	    	
+            fbct_bint_ren.append(self.bint[ii,:]/cor_fact[ii])
+            t_stamps_ren.append(self.t_stamps[ii])
 
-	    self.bint = np.array(fbct_bint_ren)
-	    self.t_stamps = np.array(t_stamps_ren)
-	    self.totint = np.sum(self.bint, axis = 1)
-	    
+        self.bint = np.array(fbct_bint_ren)
+        self.t_stamps = np.array(t_stamps_ren)
+        self.totint = np.sum(self.bint, axis = 1)
+        
 
     def uniform_time(self, t_inter=60.):
         t_stamps = self.t_stamps
@@ -49,7 +49,7 @@ class FBCT:
 
         t_stamps_unif = np.arange(np.min(t_stamps), np.max(t_stamps), t_inter)
         bint_unif = 0.*np.zeros((len(t_stamps_unif), nslots))
-        for ii in xrange(nslots):
+        for ii in range(nslots):
             bint_unif[:,ii] = np.interp(t_stamps_unif, t_stamps, bint[:,ii])
 
         return t_stamps_unif, bint_unif
@@ -71,7 +71,7 @@ class FBCT:
                 return self.bint[ind_min]
                 
 
-		
+        
 def get_variable_dict(beam):
     var_dict = {}
     var_dict['BUNCH_INTENSITY_A'] = 'LHC.BCTFR.A6R4.B%d:BUNCH_INTENSITY'%beam
@@ -82,6 +82,6 @@ def get_variable_dict(beam):
 def variable_list(beams = [1,2]):
     var_list = []
     for beam in beams:
-        var_list += get_variable_dict(beam).values()
+        var_list += list(get_variable_dict(beam).values())
 
     return var_list

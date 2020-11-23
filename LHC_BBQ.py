@@ -1,5 +1,5 @@
 import numpy as np
-import TimberManager as tm
+from . import TimberManager as tm
 
 
 class BBQ(object):
@@ -95,7 +95,7 @@ class BBQ_FFT(object):
 
 
 def get_variable_dict(beam):
-    print beam
+    print(beam)
     var_dict = {}
     var_dict['BBQ_HS_AMPL_1'] = 'LHC.BQBBQ.CONTINUOUS_HS.B{:d}:EIGEN_AMPL_1'.format(beam)
     var_dict['BBQ_HS_AMPL_2'] = 'LHC.BQBBQ.CONTINUOUS_HS.B{:d}:EIGEN_AMPL_2'.format(beam)
@@ -114,6 +114,6 @@ def get_variable_dict(beam):
 def variable_list(beams = [1, 2]):
     var_list = []
     for beam in beams:
-        var_list += get_variable_dict(beam).values()
+        var_list += list(get_variable_dict(beam).values())
 
     return var_list

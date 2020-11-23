@@ -1,6 +1,6 @@
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
-import TimberManager as tm
+from . import TimberManager as tm
 import numpy as np
 
 class Phase:
@@ -23,7 +23,7 @@ class Phase:
         nslots = 3564
         self.bunches = np.arange(nslots)
         self.values = np.zeros((len(self.t_stamps), nslots))
-        for ii in xrange(len(bunches_raw)):
+        for ii in range(len(bunches_raw)):
             bunch = bunches_raw[ii]
             self.values[:,bunch-1] = values_raw[:,ii] 
 
@@ -33,7 +33,7 @@ class Phase:
         energy_loss_part = -V_rf * np.sin(self.values*np.pi/180.)
         energy_loss_bunch = 0*energy_loss_part
         n_traces = len(self.t_stamps)
-        for ii in xrange(n_traces):
+        for ii in range(n_traces):
             fbct_raw, t_fbct_curr = fbct_obj.nearest_older_sample(self.t_stamps[ii], flag_return_time=True)
             if bct_obj is not None:
                 bct_curr = bct_obj.nearest_older_sample(t_fbct_curr)
@@ -59,14 +59,14 @@ class Phase:
                 return 0.*self.power_loss[ind_min]
             else:	
                 return self.power_loss[ind_min]
-	
-	#~ @property #never tested, so I comment it out (Gianni)
-	#~ def total_power_loss(self):
-		#~ try:
-			#~ tot = np.sum(self.power_loss, axis=1)
-		#~ except NameError:
-			#~ raise NameError ('power_loss not there!\nPlease run "stick_power_loss"')
-		#~ return tot
+    
+    #~ @property #never tested, so I comment it out (Gianni)
+    #~ def total_power_loss(self):
+        #~ try:
+            #~ tot = np.sum(self.power_loss, axis=1)
+        #~ except NameError:
+            #~ raise NameError ('power_loss not there!\nPlease run "stick_power_loss"')
+        #~ return tot
 
 def parse_csv_file(filename):
 
@@ -117,12 +117,12 @@ class PowerLoss:
         elif type(timber_variable) is dict:
             dict_timber = timber_variable
             
-        if 'filln' in dict_timber.keys():
+        if 'filln' in list(dict_timber.keys()):
             
             filln = dict_timber['filln']
             beam = dict_timber['beam']
             
-            print 'ObsBox mode'
+            print('ObsBox mode')
             from scipy.constants import e as qe
             import pytimber
             
@@ -135,11 +135,11 @@ class PowerLoss:
             
             cav_list = ['ACSCA.UX45.L%dB%d:CAV_FIELD'%(icav, beam) for icav in range(1, 9)]
 
-            print 'Downloading data. This might take a while...'
+            print('Downloading data. This might take a while...')
             data = {}
-            data.update(ldb.getAligned([u'LONGDIAG.SR4.B%d:STABLE_PHASE_MEAN_REL'%beam, u'LHC.BCTFR.A6R4.B%d:BUNCH_INTENSITY'%beam]+cav_list, 
+            data.update(ldb.getAligned(['LONGDIAG.SR4.B%d:STABLE_PHASE_MEAN_REL'%beam, 'LHC.BCTFR.A6R4.B%d:BUNCH_INTENSITY'%beam]+cav_list, 
                 master='LONGDIAG.SR4.B%d:STABLE_PHASE_MEAN_REL'%beam, t1=t_start, t2=t_stop))
-            print 'Done downloading data.'
+            print('Done downloading data.')
             
             timestamps = data['timestamps']
             intensity = data['LHC.BCTFR.A6R4.B%d:BUNCH_INTENSITY'%beam]
@@ -161,14 +161,14 @@ class PowerLoss:
             bunches_raw = np.float_(np.array(timber_variable_bunches.values)) 
             
             if len(bunches_raw) == (values_raw.shape[1]+1):
-                print 'WARNING: first bunch seems not to be there! I remove it from the bunch list.'
+                print('WARNING: first bunch seems not to be there! I remove it from the bunch list.')
                 bunches_raw = bunches_raw[1:]
 
             # create variables with all bunch slots
             nslots = 3564
             self.bunches = np.arange(nslots)
             self.power_loss = np.zeros((len(self.t_stamps), nslots))
-            for ii in xrange(len(bunches_raw)):
+            for ii in range(len(bunches_raw)):
                 bunch = bunches_raw[ii]
                 self.power_loss[:,bunch-1] = values_raw[:,ii] 
 
@@ -188,8 +188,8 @@ class PowerLoss:
                 return 0.*self.power_loss[ind_min]
             else:	
                 return self.power_loss[ind_min]
-	
+    
     @property
     def total_power_loss(self):
-		return np.sum(self.power_loss, axis=1)
-		
+        return np.sum(self.power_loss, axis=1)
+        

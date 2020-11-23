@@ -24,7 +24,7 @@ def unixstamp2localtime(t_stamp, strformat='%Y_%m_%d %H:%M:%S'):
     return time.strftime(strformat, time.localtime(t_stamp))
 
 def unixstamp2localtimestamp(t_stamps):
-    tlocal = map(datetime.datetime.fromtimestamp, t_stamps)
+    tlocal = list(map(datetime.datetime.fromtimestamp, t_stamps))
     return matplotlib.dates.date2num(tlocal)
 
 def unixstampNow():
@@ -42,7 +42,7 @@ class TimeConverter(object):
         if self.time_in == 'd':
             ret = ((t_stamps-self.t_ref)/3600./24.)
         elif self.time_in == 'datetime' or self.time_in == 'hourtime':
-            ret = matplotlib.dates.date2num(map(datetime.datetime.fromtimestamp, np.atleast_1d(t_stamps)))
+            ret = matplotlib.dates.date2num(list(map(datetime.datetime.fromtimestamp, np.atleast_1d(t_stamps))))
 
         return ret
 
