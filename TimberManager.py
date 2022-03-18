@@ -281,10 +281,15 @@ timber_variables_from_h5 = CalsVariables_from_h5
 
 try:
 
-    from pytimber.nxcals import NXCals
+    from nxcals.api.extraction.data.builders import DataQuery
+    from nxcals import spark_session_builder
+    #spark = spark_session_builder.get_or_create(app_name="spark-basic", master="yarn")
+    spark = spark_session_builder.get_or_create(app_name="spark-basic", master="local[*]")
+    #from pytimber.nxcals import NXCals
 
     # STILL TO BE COMPLETED, DOES NOT WORK WITH UNIX TIMESTAMPS
-    class NXCalsFastQuery(NXCals):
+    #class NXCalsFastQuery(NXCals):
+    class NXCalsFastQuery():
         '''
         This class can replace pytimber to have fast extraction of many
         scalar variables.
@@ -312,7 +317,7 @@ try:
 
             assert(system is not None)
 
-            query = self.DataQuery.byVariables()\
+            query = DataQuery.builder(spark).byVariables()\
                 .system(system)\
                 .startTime(self.toTimestring(t1))\
                 .endTime(self.toTimestring(t2))
@@ -322,12 +327,12 @@ try:
 
             dfp = query.build()\
                     .sort("nxcals_variable_name","nxcals_timestamp")\
-                    .na().drop()\
+                    .dropna()\
                     .select("nxcals_timestamp",
                             "nxcals_value", "nxcals_variable_name")
 
             data1=np.fromiter(
-                    (tuple(dd.values()) for dd in dfp.collect()),
+                    (tuple(dd.asDict().values()) for dd in dfp.collect()),
                     dtype=[('ts',int),('val',float),('var','U32')] )
 
             out={}
