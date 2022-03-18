@@ -126,7 +126,7 @@ class PowerLoss:
             from scipy.constants import e as qe
             import pytimber
             
-            ldb = pytimber.LoggingDB(source='ldb')
+            ldb = pytimber.LoggingDB(source='nxcals')
                        
             fillinfo = ldb.getLHCFillData(filln)
             t_start = fillinfo['startTime']
