@@ -283,8 +283,10 @@ try:
 
     from nxcals.api.extraction.data.builders import DataQuery
     from nxcals import spark_session_builder
+    from nxcals.spark_session_builder import Flavor
     #spark = spark_session_builder.get_or_create(app_name="spark-basic", master="yarn")
-    spark = spark_session_builder.get_or_create(app_name="spark-basic", master="local[*]")
+    spark = spark_session_builder.get_or_create(app_name='my-test-app', flavor=Flavor.LOCAL)
+    #spark = spark_session_builder.get_or_create(app_name="spark-basic", master="local[*]")
     #from pytimber.nxcals import NXCals
 
     # STILL TO BE COMPLETED, DOES NOT WORK WITH UNIX TIMESTAMPS
