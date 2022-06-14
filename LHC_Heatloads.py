@@ -356,7 +356,10 @@ def get_dict_magnet_lengths():
     dict_lengths = {}
     for kk in list(variable_lists_heatloads.keys()):
         for device in variable_lists_heatloads[kk]:
-            dict_lengths[device] = magnet_length[kk][0]
+            try:
+                dict_lengths[device] = magnet_length[kk][0]
+            except KeyError:
+                print(f"WARNING: {device}, {kk} not found in magnet_length!")
     return dict_lengths
 
 def get_dict_cryostat_lengths():
