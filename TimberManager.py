@@ -279,77 +279,89 @@ def parse_aligned_csv_file(filename, empty_value=np.nan):
 timber_variable_list = CalsVariable
 timber_variables_from_h5 = CalsVariables_from_h5
 
-try:
+_spark_dct={'instance':None, 'dataquery': None}
 
-    from nxcals.api.extraction.data.builders import DataQuery
-    from nxcals import spark_session_builder
-    from nxcals.spark_session_builder import Flavor
-    #spark = spark_session_builder.get_or_create(app_name="spark-basic", master="yarn")
-    spark = spark_session_builder.get_or_create(app_name='my-test-app', flavor=Flavor.LOCAL)
-    #spark = spark_session_builder.get_or_create(app_name="spark-basic", master="local[*]")
-    #from pytimber.nxcals import NXCals
+def _get_spark():
 
-    # STILL TO BE COMPLETED, DOES NOT WORK WITH UNIX TIMESTAMPS
-    #class NXCalsFastQuery(NXCals):
-    class NXCalsFastQuery():
+    if _spark_dct['instance'] is not None:
+        return _spark_dct['instance'], _spark_dct['dataquery']
+
+    try:
+        from nxcals.api.extraction.data.builders import DataQuery
+        from nxcals import spark_session_builder
+        from nxcals.spark_session_builder import Flavor
+        #spark = spark_session_builder.get_or_create(app_name="spark-basic", master="yarn")
+        _spark = spark_session_builder.get_or_create(app_name='my-test-app', flavor=Flavor.LOCAL)
+    except Exception:
+        print('NXCALS not avalable!!!')
+        _spark = 'not available'
+
+        _spark_dct['instance'] = _spark
+        _spark_dct['dataquery'] = DataQuery
+
+    return _spark, DataQuery
+
+
+
+class NXCalsFastQuery():
+    '''
+    This class can replace pytimber to have fast extraction of many
+    scalar variables.
+    '''
+    def __init__(self, *args, **kwargs):
+        if 'system' in kwargs.keys():
+            self.system = kwargs['system']
+            kwargs.pop('system')
+        super().__init__(*args, **kwargs)
+
+    def toTimestring(self, t):
+        if isinstance(t, six.string_types):
+           return t
+        else: #We assume linux timestamp
+           return time.strftime("%Y-%m-%d %H:%M:%S",
+                                        time.gmtime(t))+'.000'
+
+    def get(self, variables, t1, t2, system=None):
         '''
-        This class can replace pytimber to have fast extraction of many
-        scalar variables.
+            system should be either 'CMW' or 'WINCCOA'
         '''
-        def __init__(self, *args, **kwargs):
-            if 'system' in kwargs.keys():
-                self.system = kwargs['system']
-                kwargs.pop('system')
-            super().__init__(*args, **kwargs)
 
-        def toTimestring(self, t):
-            if isinstance(t, six.string_types):
-               return t
-            else: #We assume linux timestamp
-               return time.strftime("%Y-%m-%d %H:%M:%S",
-                                            time.gmtime(t))+'.000'
+        if system is None:
+            system = self.system
 
-        def get(self, variables, t1, t2, system=None):
-            '''
-                system should be either 'CMW' or 'WINCCOA'
-            '''
+        assert(system is not None)
 
-            if system is None:
-                system = self.system
+        spark, DataQuery = _get_spark()
 
-            assert(system is not None)
+        query = DataQuery.builder(spark).byVariables()\
+            .system(system)\
+            .startTime(self.toTimestring(t1))\
+            .endTime(self.toTimestring(t2))
 
-            query = DataQuery.builder(spark).byVariables()\
-                .system(system)\
-                .startTime(self.toTimestring(t1))\
-                .endTime(self.toTimestring(t2))
+        for vv in variables:
+            query = query.variable(vv)
 
-            for vv in variables:
-                query = query.variable(vv)
+        dfp = query.build()\
+                .sort("nxcals_variable_name","nxcals_timestamp")\
+                .dropna()\
+                .select("nxcals_timestamp",
+                        "nxcals_value", "nxcals_variable_name")
 
-            dfp = query.build()\
-                    .sort("nxcals_variable_name","nxcals_timestamp")\
-                    .dropna()\
-                    .select("nxcals_timestamp",
-                            "nxcals_value", "nxcals_variable_name")
+        data1=np.fromiter(
+                (tuple(dd.asDict().values()) for dd in dfp.collect()),
+                dtype=[('ts',int),('val',float),('var','U32')] )
 
-            data1=np.fromiter(
-                    (tuple(dd.asDict().values()) for dd in dfp.collect()),
-                    dtype=[('ts',int),('val',float),('var','U32')] )
+        out={}
+        for var in set(data1['var']):
+          sel=data1['var']==var
+          out[var]=(data1['ts'][sel]/1e9,data1['val'][sel])
 
-            out={}
-            for var in set(data1['var']):
-              sel=data1['var']==var
-              out[var]=(data1['ts'][sel]/1e9,data1['val'][sel])
+        for vv in variables:
+            if vv not in out.keys():
+                print(f'{vv} not found!')
+                out[vv] = (
+                        np.array([], dtype=np.float64),
+                        np.array([], dtype=np.float64))
 
-            for vv in variables:
-                if vv not in out.keys():
-                    print(f'{vv} not found!')
-                    out[vv] = (
-                            np.array([], dtype=np.float64),
-                            np.array([], dtype=np.float64))
+        return out
 
-            return out
-
-except Exception:
-    print('NXCALS not possible!!!')
