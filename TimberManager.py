@@ -279,12 +279,12 @@ def parse_aligned_csv_file(filename, empty_value=np.nan):
 timber_variable_list = CalsVariable
 timber_variables_from_h5 = CalsVariables_from_h5
 
-_spark = None
+_spark_dct={'instance':None, 'dataquery': None}
 
 def _get_spark():
 
-    if _spark is not None:
-        return _spark
+    if _spark_dct['instance'] is not None:
+        return _spark_dct['instance'], _spark_dct['dataquery']
 
     try:
         from nxcals.api.extraction.data.builders import DataQuery
@@ -296,7 +296,10 @@ def _get_spark():
         print('NXCALS not avalable!!!')
         _spark = 'not available'
 
-    return _spark
+        _spark_dct['instance'] = _spark
+        _spark_dct['dataquery'] = DataQuery
+
+    return _spark, DataQuery
 
 
 
@@ -328,7 +331,7 @@ class NXCalsFastQuery():
 
         assert(system is not None)
 
-        spark = _get_spark()
+        spark, DataQuery = _get_spark()
 
         query = DataQuery.builder(spark).byVariables()\
             .system(system)\
