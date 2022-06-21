@@ -14,7 +14,11 @@ def load_fill_dict_from_json(fname):
 def save_variables_and_json(varlist, file_path_prefix,
         save_json, fills_dict, fill_sublist=None,
         save_to_json=True, save_json_every = 0, db=None,
-        n_vars_per_extraction=1):
+        n_vars_per_extraction=1,
+        scaled_query_config=None):
+
+    if scaled_query_config is not None:
+        assert n_vars_per_extraction == 1
 
     if os.path.isfile(save_json):
         saved_fills =  load_fill_dict_from_json(save_json)
@@ -58,8 +62,21 @@ def save_variables_and_json(varlist, file_path_prefix,
                 f'{ii}/{len(varlist)}: {thesevars[0]} ... {thesevars[-1]}',
                 #end='\r', flush=True
                 )
-            data.update(tm.CalsVariables_from_pytimber(
-                db.get(thesevars, t_start_fill, t_end_fill)))
+            kwargs = {}
+            if scaled_query_config is not None:
+                assert len(thesevars) == 1
+                vname = thesevars[0]
+                if vname in scaled_query_config.keys():
+                    kwargs.update(scaled_query_config[vname])
+                    data.update(tm.CalsVariables_from_pytimber(
+                        db.getScaled(thesevars, t_start_fill, t_end_fill, **kwargs)))
+                else:
+                    data.update(tm.CalsVariables_from_pytimber(
+                        db.get(thesevars, t_start_fill, t_end_fill)))
+            else:
+                data.update(tm.CalsVariables_from_pytimber(
+                    db.get(thesevars, t_start_fill, t_end_fill)))
+
         print('\n\nDone downloading')
 
         print('Saving h5...')
