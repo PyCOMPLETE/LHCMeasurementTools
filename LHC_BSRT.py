@@ -156,13 +156,24 @@ class BSRT:
         gamma[mask_450] = e_dict['gamma'][450.]
 
         mask_6500 = np.logical_and(energy > 6400., energy < 6600.)
-        sigma_corr_h[mask_6500] = e_dict['sigma_corr_h'][6500.][self.beam]
-        sigma_corr_v[mask_6500] = e_dict['sigma_corr_v'][6500.][self.beam]
-        rescale_sigma_h[mask_6500] = e_dict['rescale_sigma_h'][6500.][self.beam]
-        rescale_sigma_v[mask_6500] = e_dict['rescale_sigma_v'][6500.][self.beam]
-        betaf_h[mask_6500] = e_dict['betaf_h'][6500.][self.beam]
-        betaf_v[mask_6500] = e_dict['betaf_v'][6500.][self.beam]
-        gamma[mask_6500] = e_dict['gamma'][6500.]
+        if np.any(mask_6500):
+            sigma_corr_h[mask_6500] = e_dict['sigma_corr_h'][6500.][self.beam]
+            sigma_corr_v[mask_6500] = e_dict['sigma_corr_v'][6500.][self.beam]
+            rescale_sigma_h[mask_6500] = e_dict['rescale_sigma_h'][6500.][self.beam]
+            rescale_sigma_v[mask_6500] = e_dict['rescale_sigma_v'][6500.][self.beam]
+            betaf_h[mask_6500] = e_dict['betaf_h'][6500.][self.beam]
+            betaf_v[mask_6500] = e_dict['betaf_v'][6500.][self.beam]
+            gamma[mask_6500] = e_dict['gamma'][6500.]
+
+        mask_6800 = np.logical_and(energy > 6700., energy < 6900.)
+        if np.any(mask_6800):
+            sigma_corr_h[mask_6800] = e_dict['sigma_corr_h'][6800.][self.beam]
+            sigma_corr_v[mask_6800] = e_dict['sigma_corr_v'][6800.][self.beam]
+            rescale_sigma_h[mask_6800] = e_dict['rescale_sigma_h'][6800.][self.beam]
+            rescale_sigma_v[mask_6800] = e_dict['rescale_sigma_v'][6800.][self.beam]
+            betaf_h[mask_6800] = e_dict['betaf_h'][6800.][self.beam]
+            betaf_v[mask_6800] = e_dict['betaf_v'][6800.][self.beam]
+            gamma[mask_6800] = e_dict['gamma'][6800.]
 
         sigma_h_corr_sq = (self.sigma_h*rescale_sigma_h)**2 - sigma_corr_h**2
         sigma_v_corr_sq = (self.sigma_v*rescale_sigma_v)**2 - sigma_corr_v**2
@@ -176,7 +187,8 @@ class BSRT:
 
     def find_start_scans(self, scan_thresh):
         diff_bunch = np.diff(self.bunch_n)
-        ind_start_scan_all = np.where(diff_bunch < -scan_thresh)[0]
+        #ind_start_scan_all = np.where(diff_bunch < -scan_thresh)[0]
+        ind_start_scan_all = np.where(self.bunch_n == np.min(self.bunch_n))[0]
         ind_start_scan = ind_start_scan_all[:-1][np.diff(ind_start_scan_all) > 10]
         self.t_start_scans = self.t_stamps[ind_start_scan]
         self.t_start_scans = np.array(list(self.t_start_scans)+[self.t_stamps[-1]])
@@ -256,20 +268,21 @@ class Masked:
 
 
 def emittance_dictionary():
-    e_dict = {'betaf_h':{}, 'betaf_v':{}, 'gamma':{},
-              'sigma_corr_h':{}, 'sigma_corr_v':{}}
-    e_dict['betaf_h'][450] = {1:205.5, 2:191.5}
-    e_dict['betaf_v'][450] = {1:320., 2:387.8}
-    e_dict['betaf_h'][6500] = {1:204.1, 2:191.5}
-    e_dict['betaf_v'][6500] = {1:322.7, 2:395.}
-    e_dict['gamma'][450] = 479.6
-    e_dict['gamma'][6500] = 6927.6
-    e_dict['sigma_corr_h'][450] = {1:0.,2:0.}#0.85
-    e_dict['sigma_corr_v'][450] = {1:0., 2:0.}#0.87
-    e_dict['sigma_corr_h'][6500] = {1:0.32, 2:0.34}#0.2 #0.35
-    e_dict['sigma_corr_v'][6500] = {1:0.23, 2:0.28}#0.#0.2 #0.33
+    # e_dict = {'betaf_h':{}, 'betaf_v':{}, 'gamma':{},
+    #           'sigma_corr_h':{}, 'sigma_corr_v':{}}
+    # e_dict['betaf_h'][450] = {1:205.5, 2:191.5}
+    # e_dict['betaf_v'][450] = {1:320., 2:387.8}
+    # e_dict['betaf_h'][6500] = {1:204.1, 2:191.5}
+    # e_dict['betaf_v'][6500] = {1:322.7, 2:395.}
+    # e_dict['gamma'][450] = 479.6
+    # e_dict['gamma'][6500] = 6927.6
+    # e_dict['sigma_corr_h'][450] = {1:0.,2:0.}#0.85
+    # e_dict['sigma_corr_v'][450] = {1:0., 2:0.}#0.87
+    # e_dict['sigma_corr_h'][6500] = {1:0.32, 2:0.34}#0.2 #0.35
+    # e_dict['sigma_corr_v'][6500] = {1:0.23, 2:0.28}#0.#0.2 #0.33
 
-    return e_dict
+    # return e_dict
+    raise ValueError('Not supported anymore!')
 
 
 def get_variable_dict(beam):
