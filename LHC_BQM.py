@@ -99,14 +99,22 @@ class blength:
         self.blen = []
         blen_timberstyle = timber_variable_blength.values
         blen_timberstyle = [np.array(list(map(float, x))) for x in blen_timberstyle]
-
+        
         N_acq = len(self.t_stamps)
-
+        
+        bad_points = []
         for ii in range(N_acq):
             blen_vect = np.zeros(3564)
             flag_filled_curr, Nbun_curr = fillbuck_obj.nearest_older_sample_flag_filled_Nbun(self.t_stamps[ii])
+            if sum(flag_filled_curr) != len(blen_timberstyle[ii][:Nbun_curr]):
+                bad_points.append(ii)
+                continue
             blen_vect[flag_filled_curr] = (blen_timberstyle[ii][:Nbun_curr])
             self.blen.append(blen_vect)
+
+        self.t_stamps = list(self.t_stamps)
+        for ii in bad_points[::-1]:
+            del self.t_stamps[ii]
 
         self.t_stamps = np.array(self.t_stamps)
         self.avblen = np.array(list(map(mean_nonzero, self.blen)))
