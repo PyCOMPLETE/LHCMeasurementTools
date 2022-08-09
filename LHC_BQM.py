@@ -24,6 +24,7 @@ class filled_buckets:
         self.fillbuck = [np.array([int(float(y)) for y in x]) for x in self.fillbuck]
         self.fillbuck = [(x-1)/10 for x in self.fillbuck]
         self.fillbuck = [x[x>=0] for x in self.fillbuck]
+        self.fillbuck = [x.astype(int) for x in self.fillbuck]
 
         self.Nbun = list(map(len, self.fillbuck))
         N_acq = len(self.Nbun)
@@ -37,7 +38,8 @@ class filled_buckets:
         if verbose:
             print('Start building fillbucket matrix')
         for ii in range(N_acq):
-           self.flag_filled[ii,:] = [x in self.fillbuck[ii] for x in array_slots] 
+           #self.flag_filled[ii,:] = [x in self.fillbuck[ii] for x in array_slots] 
+           self.flag_filled[ii, self.fillbuck[ii]] = True
         if verbose:
             print('Done')
 
