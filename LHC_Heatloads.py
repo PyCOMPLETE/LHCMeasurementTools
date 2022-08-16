@@ -88,7 +88,7 @@ for kk in ['special_' + m for m in ['HC_Q1', 'HC_D2', 'HC_D3', 'HC_D4', 'DS']]:
         for mm in variable_lists_heatloads[kk]:
             name = mm.split('.POSST')[0]
             var_list.append(name + ll + '.POSST')
-    variable_lists_heatloads[kk + ll] = var_list
+        variable_lists_heatloads[kk + ll] = var_list
 
 for kk in ['special_total', 'special_DS_total']:
     var_list = []
